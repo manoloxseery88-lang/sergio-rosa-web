@@ -2054,7 +2054,16 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
        ANTES DE PUBLICAR, una de dos: o hay reseñas reales y se cargan, o este
        bloque se borra entero. Publicarlo así muestra tarjetas de relleno en
        una web de un estudio jurídico, que es peor que no tener la sección. -->
-  <section class="sec sec--dark" id="resenas">
+  <!-- 🔴 19-08 · VUELVE EL display:none, PORQUE LA WEB SE PUBLICA.
+       El bloque se había destapado el 08-08 "para ver la maqueta", con la
+       advertencia escrita arriba de qué hacer antes de publicarla. Este es ese
+       momento: la ficha de Google sigue con CERO reseñas, así que las nueve
+       tarjetas de abajo son huecos con el texto "Acá va el texto de la reseña"
+       a la vista. Publicar eso en la web de un estudio jurídico es peor que no
+       tener la sección.
+       Se saca esta línea el día que haya reseñas reales cargadas. El markup y
+       el orden de la página quedan intactos: es una sola declaración. -->
+  <section class="sec sec--dark" id="resenas" style="display:none">
     <div class="env">
       <p class="kick" data-anim><br></p>
       <h2 data-anim style="margin-top:16px;max-width:24ch">Esto opinan las personas que ya confiaron en nosotros</h2>
