@@ -1648,7 +1648,7 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
            laboral primero. La palabra frena el scroll; el área evita que
            "negaron" o "intimaron" queden colgadas sin sujeto. -->
       <div class="hero__meta" aria-hidden="true" data-anim
-           data-rota="chocaron::Accidentes de tránsito|echaron::Despidos y liquidaciones|lesionaste::Accidentes de trabajo y ART|perjudicaron::Daños y perjuicios|separaste::Derecho de familia|quedó una sucesión::Sucesiones|incumplieron::Derecho empresarial|imputaron::Derecho penal|falta la escritura::Prescripción adquisitiva|intimaron::ARCA e impuestos|negaron::Amparos|desalojan::Desalojo">
+           data-rota="chocaron::Accidentes de tránsito|echaron::Despidos y liquidaciones|lesionaste::Accidentes de trabajo y ART|perjudicaron::Daños y perjuicios|separaste::Derecho de familia|quedó una sucesión::Sucesiones|incumplieron::Derecho empresarial|imputaron::Derecho penal|falta la escritura::Prescripción adquisitiva|intimaron::ARCA e impuestos|negaron::Amparos|usurparon::Desalojo">
         <b class="hero__prog"></b>
         <span class="hero__area"><span class="hero__areavia"><span>Accidentes de tránsito</span></span></span>
       </div>
@@ -2054,16 +2054,16 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
        ANTES DE PUBLICAR, una de dos: o hay reseñas reales y se cargan, o este
        bloque se borra entero. Publicarlo así muestra tarjetas de relleno en
        una web de un estudio jurídico, que es peor que no tener la sección. -->
-  <!-- 🔴 19-08 · VUELVE EL display:none, PORQUE LA WEB SE PUBLICA.
-       El bloque se había destapado el 08-08 "para ver la maqueta", con la
-       advertencia escrita arriba de qué hacer antes de publicarla. Este es ese
-       momento: la ficha de Google sigue con CERO reseñas, así que las nueve
-       tarjetas de abajo son huecos con el texto "Acá va el texto de la reseña"
-       a la vista. Publicar eso en la web de un estudio jurídico es peor que no
-       tener la sección.
-       Se saca esta línea el día que haya reseñas reales cargadas. El markup y
-       el orden de la página quedan intactos: es una sola declaración. -->
-  <section class="sec sec--dark" id="resenas" style="display:none">
+  <!-- 🔴 19-08 · EL BLOQUE VUELVE A ESTAR A LA VISTA, A PEDIDO DEL USUARIO.
+       A la mañana se le había repuesto el display:none antes de publicar, por
+       lo que dice la nota de acá arriba. El usuario pidió destaparlo igual:
+       "es para mostrar nomás". Queda dicho, entonces, y no se vuelve sobre el
+       tema: las nueve tarjetas de abajo siguen siendo HUECOS con el texto
+       "Acá va el texto de la reseña" y "Nombre · hace X meses" a la vista,
+       porque la ficha de Google existe pero tiene CERO reseñas.
+       ⚠️ Esta sección no puede quedar así el día que la web sea la de verdad
+       para el público: o se cargan reseñas reales, o el bloque se borra. -->
+  <section class="sec sec--dark" id="resenas">
     <div class="env">
       <p class="kick" data-anim><br></p>
       <h2 data-anim style="margin-top:16px;max-width:24ch">Esto opinan las personas que ya confiaron en nosotros</h2>
