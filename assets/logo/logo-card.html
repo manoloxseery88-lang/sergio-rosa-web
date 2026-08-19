@@ -1,0 +1,44 @@
+<!-- @dsCard group="Brand" -->
+<!--
+  Tarjeta de preview para el panel de claude.ai/design (Design System).
+  Esta línea 1 de arriba es la que lee el panel para armar la galería — no la borres
+  ni le cambies el orden de líneas.
+
+  Qué falta antes de que esto sirva:
+  1. Exportar desde Affinity → sr-lockup-grafito.svg (lockup completo, grafito #1C1C1C,
+     fondo transparente, texto convertido a curvas) y dejarlo en esta misma carpeta.
+  2. Exportar sr-isotipo-grafito.svg (solo el monograma SR) y dejarlo también acá.
+  Ver la configuración exacta de export en clientes/log.md, entrada del 2026-08-05
+  sobre exportación del logo, o pedímela de nuevo si no la tenés a mano.
+-->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  body{margin:0;padding:40px;background:#fff;font:14px/1.4 Inter,system-ui,sans-serif;color:#1C1C1C}
+  .row{display:flex;gap:56px;align-items:flex-end;flex-wrap:wrap}
+  .item{display:flex;flex-direction:column;gap:10px}
+  .item img{display:block;height:64px;width:auto}
+  .item span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#71717a;font-family:ui-monospace,monospace}
+  .missing{height:64px;width:180px;border:1px dashed #c9c9cd;background:repeating-linear-gradient(135deg,#f0f0f1 0 8px,#e8e8ea 8px 16px);
+            display:flex;align-items:center;justify-content:center;color:#a1a1aa;font:10px/1 ui-monospace,monospace;text-align:center;padding:6px}
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item">
+      <object data="sr-lockup-grafito.svg" type="image/svg+xml" style="height:64px;width:auto">
+        <div class="missing">falta sr-lockup-grafito.svg<br>exportar desde Affinity</div>
+      </object>
+      <span>Lockup completo · grafito sobre claro</span>
+    </div>
+    <div class="item">
+      <object data="sr-isotipo-grafito.svg" type="image/svg+xml" style="height:64px;width:64px">
+        <div class="missing" style="width:64px">falta<br>isotipo</div>
+      </object>
+      <span>Isotipo SR · favicon / espacios reducidos</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# ============================================================================
+# Este repo es PÚBLICO y tiene un solo objetivo: que la web se pueda ver y
+# mandar. Todo lo que es cocina del proyecto se queda en la máquina.
+# ============================================================================
+
+# La cocina. No sale del estudio: las comparaciones de variantes y el wireframe
+# están llenos de decisiones internas, bugs anotados, datos del cliente sin
+# cerrar y cosas que Sergio todavía tiene que validar. En un repo público eso
+# lo lee cualquiera, incluida la competencia.
+design/
+wireframe-landing.html
+
+# Fotos provisorias (marcadores de posición mientras faltaban las propias).
+# No están en la web y no se sabe de dónde salieron: no se publican.
+*-provisoria.jpg
+
+# Copias de seguridad locales de index.html, una por cambio grande. Son ~1 MB
+# cada una y casi idénticas entre sí: para eso está el historial de git.
+*.bak-*
+*.tmp
+
+# ruido del sistema
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
