@@ -14,6 +14,12 @@ wireframe-landing.html
 # No están en la web y no se sabe de dónde salieron: no se publican.
 *-provisoria.jpg
 
+# La copia portable es un ARTEFACTO: la genera design/hacer-portable.mjs a partir
+# de index.html + assets/. Pesa ~1 MB y se rehace en un segundo, así que no tiene
+# sentido versionarla ni hacerla viajar en cada clon. Se genera cuando hay que
+# mandársela a alguien.
+sergio-rosa-para-mostrar.html
+
 # Copias de seguridad locales de index.html, una por cambio grande. Son ~1 MB
 # cada una y casi idénticas entre sí: para eso está el historial de git.
 *.bak-*
