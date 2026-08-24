@@ -1,0 +1,1592 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Hoja de estilos del sitio, fuera del HTML (2026-08-23).
+   La comparten la home y las once páginas de área: el navegador la baja UNA
+   vez. Las únicas url() que tiene son las de las tipografías, relativas a este
+   archivo, así que vale igual desde cualquier carpeta.
+   Generada por design/externalizar-css-js.mjs — no editar a mano.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Las dos tipografías, ya no escritas adentro del HTML sino apuntando a los
+   archivos de assets/fonts/ (2026-08-23). Subset "latin" de Google Fonts,
+   variable 400-900: cubre español —incluido Latin-1 Supplement, o sea tildes,
+   ñ, ¿¡— sin cargar cirílico ni griego. Sigue sin haber CDN: los archivos son
+   nuestros.
+
+   Este bloque queda como <style> a propósito: el paso siguiente
+   (externalizar-css-js.mjs) lo funde con la hoja grande en un solo
+   assets/estilos.css. Así el navegador descubre la tipografía apenas parsea la
+   hoja que ya iba a pedir igual, sin un archivo aparte ni un <link rel=preload>.
+
+   🔴 El preload se probó y se sacó. Precargar una tipografía obliga a poner
+   crossorigin, y por file:// Chromium rechaza ese pedido —origen "null"— y
+   deja un error rojo en la consola cada vez que alguien abre la página con
+   doble clic, que es justo como se revisa acá. Lo que ganaba era poco:
+   font-display:swap ya evita el texto invisible, y el telón de apertura tapa
+   esos milisegundos. Fundirla en la hoja da casi lo mismo y no rompe nada. */
+@font-face{
+  font-family:'Inter';
+  src:url(fonts/inter.woff2) format('woff2');
+  font-weight:400 900;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Inter Tight';
+  src:url(fonts/inter-tight.woff2) format('woff2');
+  font-weight:400 900;
+  font-display:swap;
+}
+
+
+:root{
+  /* PRIMITIVAS — los cuatro del manual, más el hueso.
+     🔴 El hueso NO está en el manual de marca: es un color nuevo, pedido el
+     06-08 porque el blanco puro resultaba duro. Es un neutro tibio, o sea que
+     no rompe el "predominio de neutros", pero es una decisión de marca y la
+     valida Sergio antes de publicar. Está tirado al mismo hue que el dorado
+     (~40°) con saturación bajísima, así que lee emparentado y no amarillo. */
+  --blanco:#FFFFFF;
+  --hueso:#F0EEE9;
+  --grafito:#1C1C1C;
+  --onix:#0A0A0A;
+  --dorado:#D4AF6A;
+
+  /* ROLES — esto es lo que remapea .sec--dark. Todo lo que abajo use estos
+     tokens cambia de tema solo, sin una regla por selector. */
+  --fondo:var(--hueso);
+  --superficie:#F7F5F1;                 /* elevada: va hacia el blanco */
+  --texto:var(--grafito);
+  --linea:rgba(28,28,28,.14);
+  --linea-suave:rgba(28,28,28,.08);
+  --tenue:rgba(28,28,28,.68);           /* .62 -> .68: sobre hueso el .62 caía debajo de 4.5:1 */
+  /* el rayado de los huecos marcados, también como rol: se da vuelta con el tema */
+  --trama:repeating-linear-gradient(135deg,#FFFFFF,#FFFFFF 9px,#F7F5F1 9px,#F7F5F1 18px);
+  --trama-borde:rgba(28,28,28,.34);
+
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:48px;
+  --s6:64px; --s7:96px; --s8:128px;
+
+  /* La marca es Inter. Inter Tight es la misma familia con letras más angostas
+     y espaciado más cerrado: se pide primero y se cae a Inter si no está.
+     Embebida el 09-08, ya no debería caer a la variante ancha. */
+  --tipo:'Inter Tight','Inter',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  --ancho:1160px;
+  --ease:cubic-bezier(.22,.61,.24,1);
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  /* --- las tres curvas del movimiento (2026-08-12) ---
+     Antes había una sola (--ease) y todo entraba igual: 16px y opacidad. Para
+     que la página se sienta viva bajando hacen falta tres gestos distintos y
+     no tres velocidades del mismo:
+       --salida  expo-out. Frena larguísimo al final. Es la de las entradas:
+                 el elemento llega rápido y se acomoda sin rebote. Ya estaba
+                 escrita a mano en cuatro lugares del archivo; ahora es token.
+       --resorte overshoot corto. Se pasa un 4% y vuelve. Va sólo en el
+                 desplazamiento, NUNCA en opacidad ni en blur: un fundido que
+                 se pasa de 1 parpadea.
+       --ease    la de siempre, para hovers y estados. No se toca. */
+  --salida:cubic-bezier(.16,1,.3,1);
+  --resorte:cubic-bezier(.22,1.12,.36,1);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--fondo);color:var(--texto);
+  font-family:var(--tipo);
+  font-size:16.5px;font-weight:400;line-height:1.58;letter-spacing:-.005em;
+  font-optical-sizing:auto;
+  overflow-x:hidden;text-wrap:pretty;-webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%;display:block}
+a{color:var(--texto);text-decoration:none}
+a:hover{text-decoration:underline;text-decoration-color:var(--dorado);text-underline-offset:4px;text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--texto);outline-offset:3px;border-radius:2px}
+h1,h2,h3,p,ul,ol,figure{margin:0}
+ul{padding:0;list-style:none}
+
+.env{width:100%;max-width:var(--ancho);margin:0 auto;padding:0 var(--s3)}
+.sec{padding:var(--s8) 0;border-top:1px solid var(--linea-suave)}
+
+/* Cabecera de sección centrada. Nace en servicios y equipo (08-08) y va como
+   clase y no como estilo inline en cada h2 porque son dos secciones que tienen
+   que quedar iguales: con inline, la próxima que se centre vuelve a copiar tres
+   propiedades a mano y a la tercera ya no coinciden.
+   El max-width va acá adentro y no en el h2 porque un max-width con margin:0
+   no centra: hace falta margin-inline:auto, y si el h2 trae el margen escrito
+   inline —como venían los dos— la regla de la hoja pierde por especificidad. */
+.cab{text-align:center;margin-bottom:var(--s6)}
+.cab h2{max-width:22ch;margin:0 auto}
+.cab .lead{max-width:58ch;margin:18px auto 0}
+
+/* Texto solo para lector de pantalla — usado por primera vez en el titular
+   del hero, que rota visualmente pero necesita anunciarse como una frase
+   completa una sola vez. Utilidad general, no scoped a una sección. */
+.sr{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* ---------- alternancia de fondo: hueso / ónix ----------
+   Pedido el 06-08. El ritmo lo lleva una clase explícita y NO un :nth-child, a
+   propósito: el bloque 07 (reseñas) se saca entero si no aparece la ficha de
+   Google, y con nth-child se daría vuelta toda la página sola. Si ese día llega,
+   se le pasa .sec--dark a #contacto y listo.
+
+   No es una inversión mecánica del tema claro: el oscuro tiene su propia
+   elevación (grafito sobre ónix), su propio secundario —crema tibia, tirada al
+   dorado, en vez de gris lavado— y sus propias hairlines. Lo único que se
+   repite son las primitivas del manual.
+
+   Todo lo que abajo usa --texto / --tenue / --linea / --superficie / --trama
+   cambia de tema solo. Las reglas sueltas de acá son para lo que se pinta con
+   una primitiva y no con un rol. */
+.sec--dark{
+  background:var(--onix);
+  --fondo:var(--onix);
+  --superficie:var(--grafito);          /* la elevación sube, no baja */
+  --texto:var(--blanco);
+  --tenue:rgba(242,234,219,.74);        /* crema tibia: sale del dorado, no es gris */
+  --linea:rgba(242,234,219,.22);
+  --linea-suave:rgba(242,234,219,.12);
+  --trama:repeating-linear-gradient(135deg,#0E0E0E,#0E0E0E 9px,#151515 9px,#151515 18px);
+  --trama-borde:rgba(242,234,219,.30);
+  color:var(--texto);
+  border-top-color:transparent;         /* el cambio de color ya separa */
+}
+.sec--dark + .sec{border-top-color:transparent}
+/* el botón sólido se da vuelta: sobre ónix, grafito sobre grafito no existe */
+.sec--dark .btn{background:var(--blanco);color:var(--grafito);border-color:var(--blanco)}
+.sec--dark .btn:hover{background:#E8E4DB;color:var(--grafito)}
+.sec--dark .btn--gh{background:transparent;color:var(--texto);border-color:var(--linea)}
+.sec--dark .btn--gh:hover{background:rgba(242,234,219,.07);color:var(--texto);border-color:var(--texto)}
+.sec--dark :focus-visible{outline-color:var(--texto)}
+
+/* pesos con rol: 600 titulares · 500 subtítulos · 450 destacados · 400 cuerpo.
+   Bajados el 06-08: con Inter Tight apretada, 900 se veía cargado.
+
+   ── EL DESTAQUE ES PESO, NUNCA COLOR (2026-08-14) ────────────────────────
+   La regla que ya regía el lead del hero y las pestañas del formulario pasa
+   a valer en todo el archivo. Tres puntos:
+
+     1 · Adentro de un párrafo nadie cambia de color. <strong> y <b> heredan
+         el color del texto que los rodea (color:inherit) y sólo suben de
+         peso, 400 → 600. La Inter Tight variable embebida da los dos pesos
+         sin pedir un archivo más.
+     2 · El dorado no toca una sola letra. Sigue siendo el acento de la marca
+         —§2 del BRIEF— pero como MARCA GRÁFICA: la rayita del kicker, el
+         punto del riel, el frente del riel, la barra de lectura, el guion de
+         la cinta, el borde de la pestaña activa, el subrayado del hover.
+         Nunca como color de tipografía. De paso saca de la cancha el único
+         par que el manual desaconseja (dorado sobre claro en texto chico).
+     3 · Activo / inactivo se dice con peso. El color sigue marcando ROL
+         —principal (--texto) contra metadato (--tenue)—, que es otra cosa:
+         eso no es énfasis, es de qué tipo de dato se trata.               */
+h1{font-size:clamp(42px,7.2vw,88px);line-height:1;letter-spacing:-.035em;font-weight:600;color:var(--texto);word-spacing:.04em}
+h2{font-size:clamp(30px,3.9vw,50px);line-height:1.04;letter-spacing:-.042em;font-weight:600;color:var(--texto)}
+h3{font-size:18.5px;line-height:1.28;letter-spacing:-.025em;font-weight:500;color:var(--texto)}
+.lead{font-size:clamp(16.5px,1.45vw,19.5px);line-height:1.5;letter-spacing:-.012em;color:var(--tenue);max-width:54ch}
+.lead strong{font-weight:600;color:inherit}
+
+.kick{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:400;color:var(--tenue)}
+/* la rayita dorada se dibuja sola cuando el rótulo entra: el guiño más chico
+   del sistema, y el que más se repite (cinco bloques). transform-origin:left
+   para que crezca hacia el texto y no desde el aire. */
+.kick::before{
+  content:"";display:inline-block;width:24px;height:1px;background:var(--dorado);
+  vertical-align:middle;margin-right:12px;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .62s var(--salida) var(--d,0ms);
+}
+.kick.vista::before,.sin-js .kick::before{transform:none}
+
+/* ---------- botones ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;padding:0 26px;border:1px solid var(--grafito);
+  font-size:15px;font-weight:450;letter-spacing:-.015em;
+  background:var(--grafito);color:var(--blanco);cursor:pointer;white-space:nowrap;
+  transition:background .28s var(--ease),transform .28s var(--ease),border-color .28s var(--ease);
+}
+.btn:hover{background:var(--onix);color:var(--blanco);text-decoration:none;transform:translateY(-1px)}
+.btn:active{transform:scale(.97)}
+.btn--gh{background:transparent;color:var(--grafito);border-color:var(--linea)}
+.btn--gh:hover{background:transparent;color:var(--grafito);border-color:var(--grafito)}
+/* marcador de dato pendiente dentro de un control: mismo lenguaje que los huecos */
+.pend{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  border:1px dashed currentColor;padding:3px 6px;opacity:.75;white-space:nowrap;
+}
+
+.barre{position:relative;display:inline-block}
+.barre::after{
+  content:"";position:absolute;left:0;bottom:-4px;height:2px;width:100%;
+  background:var(--dorado);transform:scaleX(0);transform-origin:left center;
+  transition:transform .42s var(--ease);
+}
+a:hover>.barre::after,.barre:hover::after{transform:scaleX(1)}
+
+/* ---------- huecos marcados ---------- */
+.hueco{
+  border:1px dashed var(--trama-borde);
+  background:var(--trama);
+  padding:var(--s4);display:flex;flex-direction:column;justify-content:center;gap:8px;
+}
+.hueco__t{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--texto)}
+/* nota al pie de un bloque incompleto. Era un style inline con el dashed
+   escrito a mano en tres lugares; como clase se da vuelta con el tema. */
+.nota{border:1px dashed var(--trama-borde);padding:12px 14px}
+.hueco__d{font-family:var(--mono);font-size:12px;color:var(--tenue);line-height:1.55}
+
+/* ---------- 01 header ---------- */
+.head{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  background:transparent;border-bottom:1px solid transparent;
+  transition:background .24s var(--ease),border-color .24s var(--ease),backdrop-filter .24s var(--ease),
+             transform .42s var(--salida);
+}
+/* Se esconde bajando y vuelve al primer scroll hacia arriba (2026-08-12).
+   Devuelve 72px de alto real en celular, que es donde se lee esta página, y
+   el gesto de volver hace que la barra se sienta viva y no pegada. Nunca se
+   esconde arriba de todo, con el menú abierto, ni con un campo del
+   formulario enfocado — ver alScroll() en el script. */
+.head[data-oculto="si"]{transform:translate3d(0,-102%,0)}
+/* 🔴 Y el quinto caso, que es al revés: con una ficha del equipo abierta el
+   header se ESCONDE sí o sí (18-08). La ficha ocupa la pantalla entera y su ✕
+   vive en la esquina de arriba a la derecha con z-index 7, adentro de la
+   sección; el header es fixed con z-index 40, así que le caía justo encima y
+   se comía el clic —medido: elementFromPoint sobre el ✕ devolvía el header y
+   no el botón, o sea que en escritorio la ficha no se podía cerrar con el
+   mouse; sólo con Escape—. Va por clase y no por data-oculto porque ese
+   atributo lo reescribe alScroll() en cada scroll y volvería a taparlo. Gana
+   por especificidad (0,2,1 contra 0,2,0) sin necesidad de !important. */
+body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
+
+/* --- barra de lectura ---
+   Hairline dorada arriba de todo, fuera del header para que no se vaya con
+   él cuando se esconde. Es la única pieza nueva de interfaz: dice cuánto
+   falta, que en una página larga de una sola columna no se ve de otra forma. */
+.lectura{
+  position:fixed;top:0;left:0;right:0;height:2px;z-index:60;pointer-events:none;
+  background:transparent;
+}
+.lectura i{
+  display:block;height:100%;background:var(--dorado);
+  transform:scaleX(var(--p,0));transform-origin:left center;
+}
+.head[data-fijo="si"]{
+  background:rgba(240,238,233,.92);backdrop-filter:saturate(1.4) blur(12px);
+  border-bottom-color:var(--dorado);
+}
+/* Sobre la foto del hero el header no tiene fondo: todo pasa a blanco, con
+   sombra de texto para que aguante cualquier zona de la imagen. Al ganar el
+   fondo blanco (data-fijo="si") vuelve a grafito. */
+.head:not([data-fijo="si"]) .marca__txt b{color:#fff;text-shadow:0 1px 12px rgba(10,10,10,.5)}
+.head:not([data-fijo="si"]) .marca__txt span{color:rgba(255,255,255,.74)}
+/* !important y no a secas: los tres <path> del simbolo traen style="fill:#1C1C1C"
+   escrito en el archivo, y un estilo en linea le gana a la hoja. Sin esto la
+   regla existia pero no hacia nada: el simbolo quedaba grafito sobre la foto
+   del hero, o sea invisible - se veia el texto de la marca y al lado un hueco.
+   Con data-fijo="si" (header con fondo) el inline vuelve a mandar y el logo es
+   grafito otra vez, como siempre. */
+.head:not([data-fijo="si"]) .marca svg path{fill:#fff!important}
+.head:not([data-fijo="si"]) .nav a{color:#fff;text-shadow:0 1px 12px rgba(10,10,10,.5)}
+.head:not([data-fijo="si"]) .head__menu{color:#fff}
+.head:not([data-fijo="si"]) .btn{background:var(--blanco);color:var(--grafito);border-color:var(--blanco)}
+.head:not([data-fijo="si"]) .btn:hover{background:var(--blanco);color:var(--grafito);transform:translateY(-1px)}
+.head:not([data-fijo="si"]) :focus-visible{outline-color:#fff}
+.head__in{display:flex;align-items:center;gap:var(--s4);min-height:72px}
+.marca{display:flex;align-items:center;gap:12px;flex:none}
+.marca:hover{text-decoration:none}
+.marca svg{width:30px;height:26px}
+.marca__txt{display:flex;flex-direction:column;line-height:1.25}
+.marca__txt b{font-size:13.5px;font-weight:600;letter-spacing:-.005em;word-spacing:.06em;color:var(--grafito)}
+.marca__txt span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--tenue)}
+.nav{display:flex;gap:var(--s4);margin-left:auto;align-items:center}
+.nav a{font-size:14px;color:var(--grafito)}
+.nav a:hover{text-decoration:none}
+.head .btn{min-height:44px;padding:0 18px;font-size:14px;flex:none;gap:8px}
+.head .btn__ic{display:none;width:20px;height:20px;flex:none;fill:currentColor}
+/* padding 14 y no 10: es el control principal de navegación en celular y con
+   10 medía 42×35, por debajo del objetivo táctil. Con 14 queda 50×43 sin que
+   cambie un pixel de lo que se ve —las tres barras siguen igual (14-08). */
+.head__menu{display:none;margin-left:auto;background:none;border:0;padding:14px;cursor:pointer;color:var(--grafito)}
+.head__menu b{display:block;width:22px;height:1.5px;background:currentColor}
+.head__menu b+b{margin-top:5px}
+@media (max-width:980px){
+  .head__in{min-height:60px;gap:var(--s2)}
+  .nav{display:none}
+  .head__menu{display:block}
+  /* el botón de WhatsApp no se colapsa nunca */
+  .head .btn{margin-left:0}
+}
+/* Auditoría 08-08: a 375px el logo (203px) + hamburguesa (42px) + este botón
+   (201px) no entran — el botón queda con el 63% fuera de la pantalla e
+   inclicable, oculto en silencio por el overflow-x:hidden del body. Achicar
+   la bajada del logo no libera ancho (marca__txt estira ambas líneas al
+   ancho del título, medido en el DOM). Colapsa a ícono-only en vez de
+   desaparecer: sigue siendo el CTA #1 del sitio en el dispositivo real de
+   Carlos/Roberto/Diego, solo que ahora entra. 560px porque a esa medida el
+   botón entero todavía respeta el padding del .env (var(--s3)); por debajo
+   ya lo pisa. */
+@media (max-width:560px){
+  .head .btn{width:44px;min-height:44px;padding:0;gap:0}
+  .head .btn__txt{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+  }
+  .head .btn__ic{display:block}
+}
+/* panel a pantalla completa, entra desde la derecha */
+.panel{
+  position:fixed;inset:0;z-index:45;background:var(--hueso);
+  display:flex;flex-direction:column;justify-content:center;gap:var(--s2);padding:var(--s6) var(--s3);
+  transform:translate3d(100%,0,0);transition:transform .32s var(--ease);
+  visibility:hidden;
+}
+.panel[data-abierto="si"]{transform:none;visibility:visible}
+.panel a{font-size:28px;font-weight:600;letter-spacing:-.04em}
+.panel button{
+  position:absolute;top:14px;right:14px;background:none;border:1px solid var(--linea);
+  width:44px;height:44px;font-size:20px;cursor:pointer;color:var(--grafito);
+}
+
+/* ---------- 01bis · telón de apertura (2026-08-19) ----------
+   Pedido del usuario con ario.law y roeh.com de referencia. Se compararon seis
+   variantes en `design/telon-variantes.html` — está elegida la F.
+
+   QUÉ ES: una hoja ónix a pantalla completa con el símbolo enorme colgado del
+   borde izquierdo, y la cuenta de carga en la esquina de abajo a la derecha.
+   Cuando la página termina de cargar, la hoja sube y el símbolo se contrae
+   hasta su lugar exacto en el header.
+
+   Cuatro decisiones que valen el comentario:
+   · EL SÍMBOLO NO SE DESVANECE: viaja. El clon nace calzado sobre el logo real
+     —el script le copia left/top/width/height— y volver a transform:none ES el
+     vuelo, así que el destino no puede desviarse. Por eso vive FUERA de .telon:
+     si fuera hijo, subiría con la hoja en vez de quedarse.
+   · EL SÍMBOLO CUELGA DEL MISMO MARGEN QUE EL TITULAR DEL HERO
+     (clamp(24px,6vw,80px)). No está centrado: la página entera cuelga sus cosas
+     del borde izquierdo real y el telón no es la excepción.
+   · LA CUENTA Y LA BARRA SON EL MISMO DATO, y no dos adornos sueltos: las dos
+     salen de cuenta.v. Suben hasta 92 con el reloj y saltan a 100 cuando el load
+     llega de verdad — el 100 significa "cargó", no "se cumplió el tiempo".
+   · NO EXISTE sin JS, sin GSAP, con reduce, ni al recargar a mitad de página, y
+     el script lo saca por tiempo (tope de 4s) aunque el load nunca llegue. Son
+     las únicas formas de quedar tapado para siempre, y todas tienen salida.   */
+.telon{position:fixed;inset:0;z-index:90}
+.sin-js .telon,.sin-js .telon__sim{display:none}
+.telon__hoja{
+  position:absolute;inset:0;display:block;background:var(--onix);
+  will-change:transform;
+}
+/* el ónix no queda plano detrás de un símbolo de este porte: el resplandor va
+   corrido a la izquierda, o sea detrás del símbolo y no en el medio de la nada */
+.telon__hoja::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(90% 70% at 26% 50%,rgba(212,175,106,.13),transparent 66%);
+}
+/* LA CARGA. Abajo a la derecha: el símbolo se fue a la izquierda y esa esquina
+   quedó vacía — es el contrapeso, y de paso lo único que dice cuánto falta. */
+.telon__carga{
+  position:absolute;right:0;bottom:0;left:0;z-index:3;
+  padding:0 clamp(24px,6vw,80px) clamp(26px,4vw,40px);
+  display:flex;align-items:flex-end;justify-content:flex-end;gap:8px;
+  pointer-events:none;
+}
+.telon__n{
+  font-family:var(--mono);font-weight:500;color:#fff;
+  font-size:clamp(38px,6.4vw,86px);line-height:.86;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;   /* si no, el número baila mientras cuenta */
+}
+.telon__pc{
+  font-family:var(--mono);font-size:clamp(11px,1.2vw,15px);color:var(--dorado);
+  letter-spacing:.12em;padding-bottom:6px;
+}
+/* la barra va a sangre contra el borde de abajo: es el piso de la pantalla
+   llenándose, no un widget apoyado en el medio */
+.telon__barra{
+  position:absolute;left:0;right:0;bottom:0;height:2px;z-index:4;
+  background:rgba(255,255,255,.1);overflow:hidden;
+}
+.telon__barra>i{display:block;height:100%;background:var(--dorado);transform:scaleX(0);transform-origin:left center}
+/* el clon que viaja: nace con las medidas del logo del header y el script le
+   escribe el transform que lo lleva a su tamaño grande */
+.telon__sim{
+  position:fixed;z-index:94;pointer-events:none;visibility:hidden;
+  transform-origin:0 0;color:#fff;
+}
+.telon__sim svg{display:block;width:100%;height:100%}
+/* el logo real espera apagado y vuelve con un cruce de 240ms cuando el clon
+   aterriza: así un píxel de diferencia en la medición no se lee como salto */
+.marca{transition:opacity .22s var(--ease)}
+.telonando:not(.sin-js) .marca{opacity:0}
+
+/* ---------- 02 hero ---------- */
+/* Retrato de Sergio en el estudio (estantería con códigos y biblioteca),
+   a sangre — reemplaza a la foto de la fachada el 2026-08-10, pedido directo
+   del usuario: la cara del titular pesa más que el edificio. La sección
+   sigue en tema oscuro completo con .sec--dark: los roles (--texto, --tenue,
+   --linea) se dan vuelta solos, en vez de un puñado de rgba(255,255,255,…)
+   escritos a mano. */
+.hero{
+  position:relative;min-height:100svh;display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;
+  text-align:left;padding:var(--s7) 0 var(--s5);overflow:hidden;
+}
+/* El encuadre está resuelto EN EL ARCHIVO (recortado a 1600×1067, aspecto
+   1,5, Sergio a la derecha del centro) y no acá, mismo motivo que con la
+   fachada: object-position por porcentaje recortaba distinto en cada ancho
+   de viewport. Sin blur (pedido del usuario 2026-08-10: se veía como foto
+   rota) — el ruido de los lomos de libros de la estantería se controla solo
+   con brightness/saturate más bajos, no con desenfoque. object-position
+   corrido a la derecha (68%) y no al centro: al 50% la cara quedaba
+   demasiado cerca de la columna de texto en anchos intermedios (tablet/
+   notebook chico), donde el recorte de cover ya no muestra el archivo
+   entero. */
+/* Dos capas para dos movimientos que no se pisan: la ENTRADA vive en el
+   contenedor (aparece y se acomoda de 1,04 a 1 al abrir la página) y el
+   PARALAJE vive en la imagen (--py, que reescribe el script en cada cuadro
+   mientras bajás). Si los dos escribieran transform sobre el mismo nodo, el
+   último en pintar borraría al otro. */
+.hero__foto{
+  position:absolute;inset:0;z-index:0;
+  opacity:0;transform:scale(1.04);
+}
+.hero.entra .hero__foto{
+  opacity:1;transform:none;
+  transition:opacity 1s var(--salida),transform 1.8s var(--salida);
+}
+.sin-js .hero__foto{opacity:1;transform:none}
+.hero__foto img{
+  width:100%;height:100%;object-fit:cover;object-position:68% 46%;
+  /* 1,08 y no 1,04: el 8% de sobrante es lo que se come el paralaje sin
+     dejar ver el borde de la foto por arriba o por abajo (±28px, ver el
+     tope en el script). */
+  transform:translate3d(0,var(--py,0px),0) scale(1.08);transform-origin:center;
+  filter:saturate(.5) contrast(1.02) brightness(.6);
+}
+/* El vertical deja respirar arriba y cierra fuerte de la mitad para abajo,
+   que es donde vive todo el texto; el horizontal cierra fuerte la columna
+   izquierda (donde cae el h1) y deja ver a Sergio, que en el archivo ya
+   quedó ubicado a la derecha. */
+.hero__foto::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(10,10,10,.42) 0%,rgba(10,10,10,.14) 24%,rgba(10,10,10,.55) 56%,rgba(10,10,10,.85) 100%),
+    linear-gradient(100deg,rgba(10,10,10,.72) 0%,rgba(10,10,10,.42) 46%,rgba(10,10,10,.1) 76%,transparent 92%);
+}
+/* El resto del sitio usa .env centrado a --ancho (1160px) porque son
+   bloques de contenido, no fotos a sangre. El hero es la única sección con
+   foto de borde a borde: con el mismo .env, en una pantalla ancha el título
+   arranca 150-400px adentro del borde real de la ventana, un hueco enorme de
+   pared vacía antes de la primera letra — pedido del usuario 2026-08-10.
+   Acá el texto cuelga del borde real con su propio padding, no del centrado
+   del sitio. */
+.hero .env{position:relative;z-index:1;max-width:none;width:100%;padding-left:clamp(24px,6vw,80px);padding-right:var(--s3)}
+.hero h1,.hero .lead{text-shadow:0 1px 18px rgba(10,10,10,.62)}
+.hero__areavia>span,.hero__bajaT,.hero__dato{text-shadow:0 1px 12px rgba(10,10,10,.7)}
+
+/* --- el titular: "Si te" fijo + doce situaciones que rotan, una por área ---
+   En el orden de volumen real de consulta, el mismo de la retícula de
+   servicios: tránsito y laboral se llevan los primeros siete segundos de
+   cada vuelta, que es lo que ve el 90% de las visitas. Sin ese orden el hero
+   volvía a ser el "hacemos todo" que el §C del BRIEF marca como el error del
+   único reel publicado — la compensación es el orden, más que el CTA siga
+   anclado en "contanos qué te pasó" y no en un menú. */
+.hero__fijo{display:block}
+/* Sin JS y con motion reducido esto queda como texto plano en línea — el
+   contenido nunca depende de que el script corra (ver el fallback dentro del
+   span en el HTML). */
+.hero__rot{display:inline}
+.hero__rot.on{
+  display:inline-block;position:relative;overflow:hidden;vertical-align:top;
+  height:1.16em;margin-bottom:-.14em;white-space:nowrap;
+}
+.hero__via{display:block}
+.hero__rot.on .hero__via{transition:transform .46s var(--ease)}
+/* width:max-content y no block a secas: si el ítem estirara al ancho de la
+   caja, el medidor del script devolvería doce veces el mismo número.
+   El cruce es de OPACIDAD, asimétrico: la máscara mide 1,16em y las
+   mayúsculas de Inter ocupan ~0,72, así que a mitad de giro entrarían DOS
+   palabras legibles en el mismo hueco si sólo se desplazara. La que entra
+   tarda .2s y la que sale .34s — cuando la nueva ya está al 100%, la vieja
+   todavía se está yendo, y nunca hay un frame sin titular. */
+.hero__pal{display:block;width:max-content;height:1.16em;line-height:1.16}
+.hero.on .hero__pal{opacity:0;transition:opacity .34s var(--ease)}
+.hero.on .hero__pal.act{opacity:1;transition:opacity .2s var(--ease)}
+
+/* --- el pie del titular: hairline de compás + el área que nombra la palabra ---
+   Sin esto "negaron" o "intimaron" quedan colgadas sin sujeto: la palabra
+   frena el scroll, el área explica. Rota con el mismo reloj que la palabra. */
+.hero__meta{margin-top:var(--s3);max-width:100%}
+.hero__prog{
+  display:block;height:2px;width:0;background:var(--dorado);
+  transform:scaleX(0);transform-origin:left center;
+}
+.hero.corre .hero__prog{animation:prog var(--hold,2400ms) linear forwards}
+@keyframes prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero.quieto .hero__prog{animation-play-state:paused}
+.sin-js .hero__prog{width:140px;transform:scaleX(1)}
+.hero__area{display:block;overflow:hidden;height:18px;margin-top:11px}
+.hero__areavia{display:block}
+.hero.on .hero__areavia{transition:transform .46s var(--ease)}
+/* > y no el descendiente a secas: .hero__areavia es ELLA MISMA un <span>, así
+   que ".hero__area span" también la agarraba a ella. Con su propio opacity:0
+   (heredado de esa regla) apagaba a todos sus hijos aunque cada uno tuviera
+   opacity:1 — el área nunca se veía. El hijo directo la deja afuera. */
+.hero__areavia>span{
+  display:block;height:18px;line-height:18px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--tenue);white-space:nowrap;
+}
+.hero.on .hero__areavia>span{opacity:0;transition:opacity .34s var(--ease)}
+.hero.on .hero__areavia>span.act{opacity:1;transition:opacity .2s var(--ease)}
+
+.hero .lead{margin:var(--s5) 0 0;max-width:50ch}
+/* El <strong> del lead ya no necesita regla propia acá: desde el 14-08 la
+   regla sitewide (.lead strong) hace exactamente esto —heredar el color del
+   párrafo y subir a 600— en toda la página. Ver el bloque "el destaque es
+   peso, nunca color" arriba de h1. */
+.hero__cta{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s5)}
+
+/* --- botones: vidrio en reposo, dorado al pasar el cursor ---
+   Con la fachada detrás el backdrop-filter tiene qué desenfocar de verdad: la
+   reja y el cartel se ven corridos abajo del botón — sobre un fondo macizo no
+   haría nada. El barrido dorado reusa el MISMO mecanismo que la retícula de
+   servicios (bloque 04): un [data-desde] que escribe el JS con el borde por
+   donde entró el cursor, y una transición de transform-origin en el CSS. */
+.hero__cta .btn{
+  position:relative;overflow:hidden;isolation:isolate;
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);
+          backdrop-filter:blur(16px) saturate(1.5);
+  transition:color .01s linear .24s,border-color .42s var(--ease),transform .28s var(--ease);
+}
+/* el sólido no llega al blanco opaco a propósito: al 90% la fachada se
+   insinúa abajo y se nota que es vidrio. Grafito encima da 11,7:1. */
+/* Auditoría 08-08: ninguno de los dos puede llevar dorado de fondo (regla de
+   contraste), así que en mobile —donde se apilan y se leen uno debajo del
+   otro sin el orden horizontal ayudando— quedaban con el mismo peso. La
+   diferencia pasa a la tipografía: 600 en el primario contra los 450 base
+   del ghost, mismo truco que ya usa el <strong> del lead. */
+.hero__cta .btn:not(.btn--gh){background:rgba(255,255,255,.9);color:var(--grafito);border-color:rgba(255,255,255,.9);font-weight:600}
+.hero__cta .btn--gh{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.42)}
+.hero__cta .btn::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--dorado);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .52s cubic-bezier(.16,1,.3,1);
+}
+.hero__cta .btn[data-desde="top"]::before   {transform:scaleY(0);transform-origin:top}
+.hero__cta .btn[data-desde="bottom"]::before{transform:scaleY(0);transform-origin:bottom}
+.hero__cta .btn[data-desde="left"]::before  {transform:scaleX(0);transform-origin:left}
+.hero__cta .btn[data-desde="right"]::before {transform:scaleX(0);transform-origin:right}
+.hero__cta .btn:hover::before,.hero__cta .btn:focus-visible::before{transform:scale(1,1)}
+.hero__cta .btn:hover,.hero__cta .btn:focus-visible{color:var(--grafito);border-color:var(--dorado);transform:translateY(-1px)}
+/* al salir el texto vuelve antes de que el oro termine de irse */
+.hero__cta .btn:not(:hover):not(:focus-visible){transition-delay:.12s,0s,0s}
+
+/* --- invitación a seguir bajando: un pip dorado por una hairline ---
+   Ni flecha rebotando ni mouse dibujado. Mismo vocabulario que el riel del
+   bloque 05 y que la hairline del titular, a escala de señal. Es un <a> real
+   a #servicios, no decorativo. */
+.hero__baja{
+  display:flex;flex-direction:column;align-items:flex-end;gap:9px;
+  margin-top:var(--s4);color:var(--tenue);
+}
+.hero__baja:hover{color:var(--tenue);text-decoration:none}
+.hero__bajaT{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.hero__bajaL{position:relative;display:block;width:1px;height:46px;background:var(--linea);overflow:hidden}
+.hero__bajaL::after{
+  content:"";position:absolute;left:0;top:0;width:1px;height:16px;background:var(--dorado);
+  animation:baja 2.6s var(--ease) infinite;
+}
+@keyframes baja{0%{transform:translateY(-16px)}58%,100%{transform:translateY(46px)}}
+
+/* --- la franja de datos, en movimiento ---
+   Reemplaza al contador de fichas de vidrio con count-up: la misma
+   información —30 años, las tres ciudades, el horario, las 11 áreas, las dos
+   sedes— corre ahora en una cinta en vez de tres tarjetas. aria-hidden:
+   los mismos datos están en texto accesible más abajo (nosotros, equipo,
+   contacto, pie), así que la cinta no le saca nada a nadie.
+   El separador es una raya dorada de 12px y no un "·": el punto sería texto y
+   fuera de --onix el dorado no llega a 3:1; la raya es hairline. */
+.hero__cinta{
+  position:relative;margin-top:var(--s5);border-top:1px solid var(--linea);
+  padding:15px 0 0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.hero__pista{display:flex;width:max-content;animation:cinta 38s linear infinite}
+.hero__cinta:hover .hero__pista{animation-play-state:paused}
+.hero__cinta.quieta .hero__pista{animation-play-state:paused}
+.hero__set{display:flex;flex:none}
+.hero__dato{
+  flex:none;display:flex;align-items:center;gap:22px;padding-right:22px;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--tenue);white-space:nowrap;
+}
+/* el dato duro contra el conector: antes era blanco contra crema, ahora es
+   peso contra peso — el mismo cambio que hicieron los <strong> del lead */
+.hero__dato b{font-weight:600;color:inherit}
+.hero__dato::after{content:"";width:12px;height:1px;background:var(--dorado);flex:none}
+@keyframes cinta{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+
+/* SplitText a mano: los títulos entran por palabras, con máscara.
+   Sin React, sin GSAP, sin ScrollTrigger — mismo from/to (opacity 0 → 1, y 40 → 0),
+   ease power3.out traducida a cubic-bezier, stagger por palabra. */
+.sp-w{
+  display:inline-block;overflow:hidden;vertical-align:bottom;
+  padding:.06em .04em .2em;margin:-.06em -.04em -.2em;
+}
+/* Sin will-change acá (14-08): son 69 palabras partidas en la página y cada
+   una se quedaba con una capa de GPU PARA SIEMPRE, porque el will-change del
+   CSS no se retira nunca. Animan una sola vez al revelarse. Ahora la capa se
+   pide por JS justo antes de encender y se devuelve en transitionend. */
+.sp-i{
+  display:inline-block;opacity:0;transform:translate3d(0,1em,0);
+  filter:blur(5px);
+  /* la palabra sube con el resorte y se enfoca con la salida: el
+     desplazamiento se pasa apenas del cero y vuelve, el fundido nunca. */
+  transition:opacity .42s var(--salida),filter .46s var(--salida),transform .58s var(--resorte);
+}
+.sp-i.on{opacity:1;transform:none;filter:blur(0)}
+
+@media (max-width:900px){.hero{min-height:auto;padding:var(--s6) 0 var(--s5)}}
+
+
+
+/* ---------- 04 servicios: retícula de 12 celdas ----------
+   Tarjetas, sí, pero no once cajas flotando con un iconito adentro — que es
+   exactamente cómo se ve la web de todos los estudios jurídicos. Acá las celdas
+   COMPARTEN el hairline: la grilla lleva el borde de arriba y el de la izquierda,
+   cada celda el de la derecha y el de abajo. Resultado: una sola retícula
+   continua, cero bordes dobles, cero sombras, cero radio.
+   Sin iconos: el manual prohíbe los clichés jurídicos y ninguna metáfora
+   dibujada dice más que el nombre del área.
+   El número se queda porque el orden ES un dato: van por volumen real de
+   consulta (tránsito y laboral primero), no alfabéticas. Si el orden no
+   informara, los números serían decoración y no irían.
+   La celda 12 cierra la grilla en 4×3 y es el CTA de "otra consulta".
+
+   EL GESTO — el relleno entra por el borde por donde entró el cursor y se retira
+   por donde salió. Cruzando la grilla en diagonal, el grafito persigue al mouse
+   en vez de prenderse y apagarse celda por celda. Son cuatro custom properties
+   que escribe el JS; sin JS el barrido sube desde abajo y el bloque anda igual. */
+.srv{
+  margin-top:var(--s6);
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--linea-suave);
+  border-left:1px solid var(--linea-suave);
+}
+.srv__c{
+  position:relative;isolation:isolate;
+  /* número y título anclados arriba, la acción abajo: alinean las dos cosas que
+     se escanean y la diferencia de largo de las bajadas la absorbe el hueco del
+     medio. Con el bloque entero abajo, los títulos flotaban fila por fila. */
+  display:flex;flex-direction:column;justify-content:space-between;gap:var(--s4);
+  min-height:238px;padding:var(--s4);
+  border-right:1px solid var(--linea-suave);
+  border-bottom:1px solid var(--linea-suave);
+  background:var(--hueso);color:inherit;
+  /* el texto vira apenas después de que el barrido lo alcanzó */
+  transition:color .3s var(--ease) .07s;
+}
+.srv__c:hover,.srv__c:focus-visible{color:var(--blanco);text-decoration:none}
+.srv__c:focus-visible{outline-offset:-3px;z-index:2}
+/* El barrido. z-index:-1 dentro del propio isolate: queda debajo del texto y
+   encima del fondo de la celda, sin tocar el resto de la página.
+   Cuatro reglas explícitas por atributo en vez de custom properties adentro de
+   scale(): var() dentro de una función de transform no resuelve de forma
+   confiable en un pseudo-elemento, y acá además se lee mejor. */
+.srv__c::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--grafito);
+  transform:scaleY(0);transform-origin:bottom;   /* sin JS, sube desde abajo */
+  transition:transform .52s cubic-bezier(.16,1,.3,1);
+}
+.srv__c[data-desde="top"]::before   {transform:scaleY(0);transform-origin:top}
+.srv__c[data-desde="bottom"]::before{transform:scaleY(0);transform-origin:bottom}
+.srv__c[data-desde="left"]::before  {transform:scaleX(0);transform-origin:left}
+.srv__c[data-desde="right"]::before {transform:scaleX(0);transform-origin:right}
+/* va después de las cuatro de arriba a propósito: misma especificidad, gana el orden */
+.srv__c:hover::before,.srv__c:focus-visible::before{transform:scale(1,1)}
+
+.srv__n{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  color:var(--tenue);font-variant-numeric:tabular-nums;
+  transition:color .3s var(--ease) .07s;
+}
+/* El número también se enciende por peso y no por dorado. Antes había que
+   explicar por qué en reposo era gris (dorado sobre claro no pasa contraste)
+   y en hover dorado; con el peso el mecanismo es uno solo en los dos fondos. */
+.srv__c:hover .srv__n,.srv__c:focus-visible .srv__n{font-weight:600;color:inherit}
+.srv__b{display:flex;flex-direction:column;gap:10px}
+.srv__b .srv__n{margin-bottom:8px}   /* 18px hasta el título: el número respira */
+.srv__c h3{
+  font-size:clamp(19px,1.55vw,23px);letter-spacing:-.03em;line-height:1.14;
+  font-weight:500;color:inherit;text-wrap:balance;
+}
+.srv__c p{
+  font-size:14px;line-height:1.5;letter-spacing:-.008em;color:var(--tenue);
+  transition:color .3s var(--ease) .07s;
+}
+/* sobre el grafito el secundario se entibia hacia el dorado en vez de agrisarse */
+.srv__c:hover p,.srv__c:focus-visible p{color:rgba(242,234,219,.74)}
+.srv__mas{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;font-weight:500;color:inherit;
+}
+.srv__mas i{font-style:normal;transition:transform .38s var(--ease),color .3s var(--ease)}
+.srv__c:hover .srv__mas i,.srv__c:focus-visible .srv__mas i{transform:translate3d(6px,0,0);color:var(--dorado)}
+
+/* La celda 12 es el negativo de las once: arranca en grafito y al pasar el
+   mouse se vacía a blanco. Mismo gesto, dado vuelta — cierra la grilla y
+   marca que ahí la acción es otra. */
+.srv__c--cta{background:var(--grafito);color:var(--blanco)}
+.srv__c--cta::before{background:var(--hueso)}
+.srv__c--cta .srv__n{font-weight:600;color:rgba(242,234,219,.74)}
+.srv__c--cta p{color:rgba(242,234,219,.74)}
+.srv__c--cta:hover,.srv__c--cta:focus-visible{color:var(--grafito)}
+.srv__c--cta:hover .srv__n,.srv__c--cta:focus-visible .srv__n,
+.srv__c--cta:hover p,.srv__c--cta:focus-visible p{color:var(--tenue)}
+.srv__c--cta:hover .srv__mas i,.srv__c--cta:focus-visible .srv__mas i{color:var(--grafito)}
+
+@media (max-width:1024px){
+  .srv{grid-template-columns:repeat(2,1fr)}
+  .srv__c{min-height:212px;gap:var(--s5)}
+}
+@media (max-width:620px){
+  .srv{grid-template-columns:1fr}
+  .srv__c{min-height:0;gap:var(--s3);padding:var(--s3) var(--s3) 26px}
+}
+/* sin hover, el color va en el toque */
+@media (hover:none){
+  .srv__c:active{color:var(--blanco)}
+  .srv__c:active::before{transform:scale(1,1)}
+  .srv__c--cta:active{color:var(--grafito)}
+}
+
+/* ---------- 04ter · la retícula en negro ----------
+   El bloque 04 pasa a ónix el 2026-08-17. La sección lleva .sec--dark, que
+   remapea los roles, así que todo lo que se pinta con un rol se da vuelta
+   solo: el título, las bajadas, el numeral, las hairlines de la retícula.
+   Lo de acá abajo es para lo que la hoja pinta con una PRIMITIVA —el fondo
+   de la celda, el relleno del hover, la celda 12—, que por definición no
+   cambia de tema sola. Es la deuda que estaba anotada arriba de .srv el
+   17-08 ("con sec--dark el texto hereda blanco/crema y queda crema sobre
+   hueso, casi sin contraste"), acá pagada.
+
+   Dos decisiones que NO son una inversión mecánica:
+
+   · La celda arranca en ÓNIX y no en grafito, aunque el tema oscuro tenga el
+     grafito como superficie elevada. La celda clara era hueso sobre fondo
+     hueso: esta retícula no es una fila de cajas, es una tabla que existe
+     sólo por sus hairlines. En grafito sobre ónix serían doce cajas
+     flotando, que es el cliché que el bloque evita desde el principio.
+
+   · El relleno del hover se da vuelta —hueso en vez de grafito— y con él el
+     texto, pero la flecha deja el dorado y pasa a grafito: sobre el hueso
+     del relleno el dorado no llega al contraste. Mismo motivo por el que el
+     numeral se enciende por peso y no por dorado. */
+.srvN .srv__c{background:var(--onix)}
+.srvN .srv__c::before{background:var(--hueso)}
+.srvN .srv__c:hover,.srvN .srv__c:focus-visible{color:var(--grafito)}
+.srvN .srv__c:hover p,.srvN .srv__c:focus-visible p{color:rgba(28,28,28,.68)}
+.srvN .srv__c:hover .srv__mas i,.srvN .srv__c:focus-visible .srv__mas i{color:var(--grafito)}
+/* La 12 sigue siendo el negativo de las once, ahora del otro lado: arranca
+   clara y al pasar el mouse se vacía a ónix. Mismo gesto, dado vuelta dos
+   veces — que es lo que la mantiene distinta de las once en los dos temas. */
+.srvN .srv__c--cta{background:var(--hueso);color:var(--grafito)}
+.srvN .srv__c--cta::before{background:var(--onix)}
+.srvN .srv__c--cta .srv__n,.srvN .srv__c--cta p{color:rgba(28,28,28,.68)}
+.srvN .srv__c--cta:hover,.srvN .srv__c--cta:focus-visible{color:var(--blanco)}
+.srvN .srv__c--cta:hover .srv__n,.srvN .srv__c--cta:focus-visible .srv__n,
+.srvN .srv__c--cta:hover p,.srvN .srv__c--cta:focus-visible p{color:var(--tenue)}
+.srvN .srv__c--cta:hover .srv__mas i,.srvN .srv__c--cta:focus-visible .srv__mas i{color:var(--dorado)}
+@media (hover:none){
+  .srvN .srv__c:active{color:var(--grafito)}
+  .srvN .srv__c--cta:active{color:var(--blanco)}
+}
+
+/* ---------- 04quater · la carpeta que se abre y tira las once áreas ----------
+   Cómo ENTRA el bloque al bajar. Hasta el 17-08 entraba con el gesto
+   "cortina" de la gramática general —el mismo que usa la fachada de
+   "nosotros"—, después con una pila abstracta al medio de la retícula, y
+   desde hoy con la carpeta a la vista: al llegar está cerrada y llena, se
+   abre sola al bajar y va tirando las doce celdas a su casilla.
+
+   Se probó en design/servicios-carpeta.src.html contra las dos versiones
+   anteriores. El objeto es la traducción a mano del <Folder /> de React Bits
+   que vive en design/carpeta-objeto.src.html — sin React, sin build, sin CDN,
+   mismo camino que ScrollStack y DecryptedText.
+
+/* =========================================================================
+   LA CARPETA QUE REPARTE.
+
+   El objeto es el mismo que design/carpeta-objeto.html —cuerpo de grafito
+   dibujado por hairline, pestaña, dos hojas de tapa con la costura dorada—,
+   con dos diferencias: no tiene papeles propios (los papeles son las celdas
+   de la retícula) y no se abre con un clic sino con el scroll.
+   ========================================================================= */
+.cpo{position:relative}
+/* La retícula tiene que ser el ancestro posicionado de las celdas: el motor
+   mide la boca de la carpeta contra el rect de la retícula y la casilla de
+   cada celda con offsetTop/offsetLeft, que se miden contra el offsetParent.
+   Sin esto el offsetParent era .cpo —que incluye la banda de la carpeta— y
+   los dos números salían de orígenes distintos: las celdas aparecían medio
+   bloque más arriba de la carpeta. */
+.cpo .srv{position:relative}
+/* La banda propia de la carpeta. Su alto es lo que le da lugar arriba de la
+   retícula, y el sticky de adentro es lo que la mantiene a la vista mientras
+   reparte. */
+/* NO VA STICKY, y esto se probó al revés primero. Pinchada arriba, la carpeta
+   quedaba a la vista todo el reparto —que era la idea— pero flotando ENCIMA de
+   la retícula: apenas pasabas la primera fila, el objeto se le montaba a las
+   celdas ya puestas. La retícula mide más que una pantalla, así que un objeto
+   pinchado sobre ella la tapa siempre.
+   Ahora la carpeta vive en su banda, en el flujo, y el reparto entero está
+   calibrado para que termine mientras la carpeta todavía se ve: las celdas de
+   las filas de abajo aterrizan fuera de pantalla y cuando bajás ya están
+   puestas, que es lo que pasa cuando alguien reparte cartas en una mesa más
+   grande que tu campo de visión. */
+/* La banda arranca OCULTA y la muestra el motor. Es lo que cubre de una sola
+   vez los tres casos donde el reparto no corre —sin JS, con motion reducido y
+   en una sola columna—: en los tres la carpeta sería un objeto decorativo
+   parado arriba de la retícula sin hacer nada. Con display en la clase que
+   escribe el motor, sólo existe mientras hay algo que repartir.
+
+   🔴 El display va en .cpo--banda y NO en .cpo--on, y son dos clases distintas
+   a propósito (18-08). .cpo--on es el motor: se la saca en el cuadro en que el
+   reparto termina, y ahí la retícula vuelve exactamente a su CSS de siempre.
+   .cpo--banda es el LUGAR que ocupa la carpeta en el flujo, y ése sobrevive un
+   rato más: se lo saca recién cuando la banda quedó fuera de la ventana. Ver
+   soltarBanda() en el motor — juntas en una sola clase, la sección se acortaba
+   383px con la retícula a la vista. */
+.cpo__banda{display:none}
+.cpo--banda .cpo__banda{
+  display:flex;
+  position:relative;z-index:6;
+  display:flex;justify-content:center;
+  /* el aire de arriba no es decorativo: los papeles guardados asoman media
+     celda por encima de la carpeta, y sin este margen se le montaban a la
+     bajada de la sección */
+  margin:var(--s7) 0 var(--s6);
+  pointer-events:none;                /* la carpeta no come clics de la grilla */
+}
+.cpo__f{
+  --ancho-carp:360px;
+  --alto-carp:calc(var(--ancho-carp) * .8);
+  position:relative;
+  width:var(--ancho-carp);height:var(--alto-carp);
+  /* la abre y la cierra el motor con --abre, de 0 a 1 */
+  opacity:var(--vive,1);
+  transition:opacity .5s var(--ease);
+}
+.cpo__back{
+  position:absolute;inset:0;z-index:0;
+  background:var(--superficie);
+  border:1px solid var(--linea);
+}
+/* la pestaña, montada 1px sobre el borde de arriba del cuerpo para que la
+   boca de la carpeta no quede cruzada por una línea */
+.cpo__back::after{
+  content:"";position:absolute;left:-1px;bottom:calc(100% - 1px);
+  width:30%;height:calc(var(--alto-carp) * .13);
+  background:var(--superficie);
+  border:1px solid var(--linea);border-bottom:0;
+}
+/* Las dos hojas de la tapa. El plegado es el del componente original
+   —skew(±15deg) scaleY(.6)— interpolado por --abre en vez de disparado por
+   una clase, porque acá lo maneja el scroll y tiene que poder quedar a mitad
+   de camino. La costura dorada es la única aparición del dorado. */
+.cpo__tapa{
+  position:absolute;inset:0;z-index:3;
+  background:var(--superficie);
+  border:1px solid var(--linea);
+  border-top:1px solid rgba(212,175,106,.55);
+  transform-origin:bottom;
+  transform:skew(calc(var(--abre,0) * 15deg)) scaleY(calc(1 - var(--abre,0) * .4));
+}
+.cpo__tapa--der{
+  transform:skew(calc(var(--abre,0) * -15deg)) scaleY(calc(1 - var(--abre,0) * .4));
+}
+
+/* LAS CELDAS. Mientras están adentro de la carpeta o viajando, el motor les
+   escribe el transform cuadro a cuadro. El z-index se lo escribe también:
+   quietas van DEBAJO de la tapa (parecen guardadas), y en vuelo por encima. */
+.cpo--on .srv__c{backface-visibility:hidden}
+/* EL PAPEL QUE SE DRENA.
+
+   Éste es el problema de fondo de mezclar las dos piezas: en la retícula en
+   negro la celda ES ónix —es la mesa, no un papel—, así que adentro de la
+   carpeta no se veía nada: doce rectángulos ónix sobre grafito, con hairlines
+   al 12%. La carpeta se veía vacía justo cuando tenía que verse llena.
+
+   La salida no es aclarar la celda para siempre —doce bloques claros sobre
+   ónix son doce cajas flotando, el cliché que este bloque evita— sino que la
+   celda sea PAPEL mientras viaja y se vuelva MESA al llegar: sale de la
+   carpeta en hueso y el hueso se le drena en el camino. El texto entra
+   después, cuando el fondo ya es ónix, así que nunca hay un cuadro con
+   grafito sobre ónix ni blanco sobre hueso.
+
+   Va en ::after y no en el background de la celda: ::before es el barrido del
+   hover y no se toca, y una capa aparte se interpola con un solo número sin
+   pelearle al fondo que ya tiene la hoja. */
+.cpo--on .srv__c::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:var(--hueso);
+  opacity:var(--papel,0);
+}
+/* el contenido aparece con el crecimiento: a escala chica el texto no se lee
+   y amontonado adentro de la carpeta sería suciedad */
+.cpo--on .srv__b,.cpo--on .srv__mas{opacity:var(--tinta,1)}
+/* el marco de la grilla entra con las primeras celdas, como en index.html */
+.cpo--on .srv{
+  border-top-color:rgba(242,234,219,calc(var(--red,1) * .12));
+  border-left-color:rgba(242,234,219,calc(var(--red,1) * .12));
+}
+.cpo--on .srv__c{
+  box-shadow:-1px 0 0 rgba(242,234,219,calc(var(--marco,0) * .13)),
+              0 -1px 0 rgba(242,234,219,calc(var(--marco,0) * .13));
+}
+.cpo--suelta .srv__c{will-change:transform}
+
+@media (max-width:900px){
+  .cpo__f{--ancho-carp:260px}
+  /* el top era del sticky, que se cayó: la banda va en el flujo */
+}
+/* motion reducido no necesita regla propia: la banda ya está oculta por
+   omisión y el motor, que es el único que la muestra, no corre. */
+
+/* ---------- 04bis · servicios en pila apilada al scroll ----------
+   ScrollStack (React Bits) traducido a mano a vanilla — sin Lenis, sin
+   React, mismo criterio que el resto del sitio. Reemplaza la retícula
+   .srv como forma principal de mostrar las once áreas; .srv se conserva
+   tal cual como red de seguridad sin JS y con motion reducido del todo
+   (ver .pila__respaldo/.sin-js acá abajo y el motor en el <script> del
+   final del body). */
+.pila{position:relative}
+.pila__inner{position:relative}
+/* will-change lo pone y lo saca el motor de la pila según el observador: la
+   capa hace falta mientras la pila se está apilando, no durante toda la
+   sesión (14-08). Son doce tarjetas a pantalla completa. */
+.pila__card{
+  position:relative;box-sizing:border-box;
+  backface-visibility:hidden;
+  transform-origin:top center;
+}
+.pila__end{width:100%;height:1px}
+.pila--reducida .pila__card{
+  position:static!important;transform:none!important;
+  margin-bottom:var(--s4)!important;
+}
+/* HUD lateral: numeral actual / total + barra que se llena con el progreso
+   real de la pila (mismo scrollTop que mueve las tarjetas). No tiene
+   principio ni fin propios — sólo existe mientras la pila está activa
+   (.pila--activa, que pone el mismo observer que ya prende/apaga will-change
+   más abajo en el <script>). Fuera de eso queda a opacity:0 e inerte. */
+.pila__hud{
+  position:fixed;right:var(--s4);bottom:var(--s4);z-index:30;
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--tenue);
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease);
+}
+.pila--activa .pila__hud{opacity:1}
+.pila__hudActual{color:var(--texto);font-weight:700;min-width:2ch;text-align:right}
+.pila__hudBarra{position:relative;width:2px;height:56px;background:var(--tenue);border-radius:2px;overflow:hidden}
+.pila__hudBarra i{position:absolute;left:0;top:0;width:100%;height:0%;background:var(--dorado);display:block;font-style:normal}
+.pila__hudTotal{opacity:.6}
+@media (max-width:900px){.pila__hud{display:none}}
+/* Vuelta a la versión en bloques (17-08): la pila (ScrollStack) se apaga y
+   la retícula .srv, que hasta acá era sólo la red de seguridad sin JS, pasa
+   a ser la versión que se ve siempre. El motor de la pila queda intacto —
+   .pila nunca mide layout con display:none, así que alcanza con invertir
+   estas dos líneas para volver atrás el día de mañana. */
+.pila{display:none}
+.pila__respaldo{display:block;margin-top:var(--s5)}
+@media (prefers-reduced-motion:reduce){
+  .pila__card{transition:none!important}
+}
+
+.pilaH__c{
+  position:relative;isolation:isolate;overflow:hidden;
+  max-width:820px;margin-left:auto;margin-right:auto;
+  min-height:60vh;padding:var(--s6) 0 var(--s5);
+  background:var(--fondo);
+  display:flex;flex-direction:column;justify-content:center;
+  text-decoration:none;color:inherit;
+}
+.pilaH__c:focus-visible{outline:2px solid var(--dorado);outline-offset:6px}
+.pilaH__n{
+  position:absolute;bottom:0;left:0;z-index:0;
+  font-family:var(--tipo);font-weight:800;font-size:min(18vw,150px);line-height:1;
+  letter-spacing:-.05em;color:var(--texto);opacity:.05;pointer-events:none;
+}
+.pilaH__c--par .pilaH__n{left:auto;right:-.02em}
+/* Era dorado. Ahora es el mismo secundario que el resto de los rótulos mono
+   del sitio y se distingue por PESO: sigue siendo el único rótulo que llevan
+   las dos primeras tarjetas, o sea que la señal de prioridad no se pierde. */
+.pilaH__eyebrow{position:relative;z-index:1;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--tenue)}
+.pilaH__c h3{position:relative;z-index:1;margin-top:14px;font-size:clamp(36px,5.6vw,70px);line-height:.98;letter-spacing:-.03em;font-weight:700;max-width:14ch;color:var(--texto)}
+.pilaH__c p{position:relative;z-index:1;margin-top:20px;font-size:16.5px;line-height:1.6;color:var(--tenue);max-width:44ch}
+/* El "conocé más" de la pila deja el dorado y la mono y pasa a ser el mismo
+   objeto que .srv__mas de la retícula: Inter Tight, 600, color del texto.
+   Son la misma acción en las dos versiones del bloque, ahora se ven igual. */
+.pilaH__mas{position:relative;z-index:1;margin-top:22px;display:inline-flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;letter-spacing:-.01em;color:var(--texto)}
+.pilaH__mas i{font-style:normal;display:inline-block;transition:transform .38s var(--ease)}
+.pilaH__c:hover .pilaH__mas i,.pilaH__c:focus-visible .pilaH__mas i{transform:translate3d(6px,0,0)}
+.pilaH__c--cta h3{font-weight:900}
+@media (max-width:640px){
+  .pilaH__c{min-height:auto;padding:var(--s5) 0}
+  .pilaH__c h3{font-size:32px}
+  .pilaH__n{font-size:22vw}
+}
+
+/* ---------- 05 nosotros ----------
+   Rediseñado el 07-08 ("variación A · riel", elegida contra la de filas).
+   Antes eran cuatro columnas iguales de número + título + texto colgadas de
+   una hairline que se dibujaba sola una vez. Dos problemas: un proceso en
+   cuatro columnas se lee como un menú —no se ve dónde empieza ni cuánto
+   falta— y la línea dorada tenía forma de mecanismo sin serlo.
+
+   Ahora la foto queda FIJA mientras el texto y los pasos pasan al lado (el
+   argumento de la sección —te acompaña una persona— hecho estructura), y la
+   línea dorada es vertical y se llena atada al scroll: cada paso se enciende
+   exactamente cuando el frente dorado lo alcanza. Es la misma regla que ya
+   rige los títulos partidos ("si frenás a mitad de camino, la frase queda a
+   mitad"), llevada a la estructura.
+
+   Los números bajan de 44 px a la mono de 11 px del bloque 04: el que tiene
+   que crecer es el verbo, que es lo que se lee de un vistazo. */
+.nos{display:grid;grid-template-columns:minmax(280px,.82fr) 1.18fr;gap:var(--s6);align-items:start}
+.nos p+p{margin-top:var(--s3)}
+.nos__col{position:sticky;top:100px}      /* 72 del header + aire */
+.nos__foto{aspect-ratio:4/5;overflow:hidden;border-radius:22px}
+/* Mismo paralaje que el hero, misma variable: la fachada se mueve más lento
+   que la columna de texto de al lado. Acá el sobrante es 10% porque el
+   recorrido es más largo (la foto queda fija mientras pasan los cuatro pasos
+   del riel) y con 8% se veía el borde al final. */
+.nos__foto img{
+  width:100%;height:100%;object-fit:cover;object-position:30% center;
+  transform:translate3d(0,var(--py,0px),0) scale(1.1);
+}
+.nos__pie{
+  margin-top:14px;font-family:var(--mono);font-size:11px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--tenue);
+}
+.nos__pie b{font-weight:600;color:inherit}
+.nos h2{max-width:20ch}
+.nos .lead,.nos .nota{margin-top:var(--s3)}
+.hair{height:1px;background:var(--linea-suave);margin:var(--s6) 0 var(--s4)}
+
+.riel{position:relative;margin-top:var(--s4)}
+.riel__lista{list-style:none;margin:0;padding:0}
+/* Riel apagado. El top/height se los reescribe el JS para que la línea nazca
+   y muera en el centro del primer y del último punto; lo de acá es el estado
+   sin JS. */
+.riel__via{position:absolute;left:5px;top:9px;bottom:9px;width:1px;background:var(--linea)}
+/* Riel dorado: lo escala el scroll. Elemento real y no un pseudo — var()
+   adentro de transform en un ::before ya dio problemas en este archivo. */
+.riel__frente{
+  position:absolute;left:5px;top:9px;bottom:9px;width:1px;background:var(--dorado);
+  transform:scaleY(0);transform-origin:top center;
+}
+.riel__p{position:relative;padding-left:40px;padding-bottom:var(--s5)}
+.riel__p:last-child{padding-bottom:0}
+.riel__p::before{
+  content:"";position:absolute;left:0;top:4px;width:11px;height:11px;border-radius:50%;
+  background:var(--onix);border:1px solid var(--linea);box-sizing:border-box;
+  transition:border-color .45s var(--ease),background .45s var(--ease),transform .45s var(--ease);
+}
+.riel__p.on::before{border-color:var(--dorado);background:var(--dorado);transform:scale(1.06)}
+/* El paso que el frente dorado ya alcanzó se enciende por PESO. El número
+   pasaba de gris a dorado y el verbo de tenue a texto: dos saltos de color
+   para decir una sola cosa. Ahora el dorado se queda donde es marca y no
+   letra —el punto y la línea vertical, que están justo al lado— y el texto
+   dice lo suyo engordando. El color sigue subiendo de tenue a texto porque
+   acá no es énfasis: los pasos que todavía no llegaste a leer están
+   literalmente atenuados, igual que el párrafo que entra desenfocado. */
+.riel__n{
+  display:block;margin-bottom:9px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  font-weight:400;color:var(--tenue);font-variant-numeric:tabular-nums;
+  transition:color .45s var(--ease),font-weight .45s var(--ease);
+}
+.riel__p.on .riel__n{font-weight:600;color:var(--texto)}
+.riel__p h3{
+  font-size:clamp(21px,2.05vw,28px);line-height:1.08;letter-spacing:-.035em;font-weight:450;
+  color:var(--tenue);transition:color .5s var(--ease),font-weight .5s var(--ease);
+}
+.riel__p.on h3{font-weight:600;color:var(--texto)}
+/* ScrollReveal de React Bits, en bloque en vez de por palabra: el párrafo
+   entra desenfocándose y subiendo, atado al mismo frente dorado. */
+.riel__p p{
+  margin-top:10px;font-size:15px;line-height:1.55;color:var(--tenue);max-width:46ch;
+  opacity:.34;filter:blur(3px);transform:translate3d(0,7px,0);
+  transition:opacity .6s var(--ease),filter .6s var(--ease),transform .6s var(--ease);
+}
+.riel__p.on p{opacity:1;filter:blur(0);transform:none}
+
+@media (max-width:1000px){
+  .nos{grid-template-columns:1fr;gap:var(--s5)}
+  .nos__col{position:static}
+  .nos__foto{aspect-ratio:4/3}
+}
+@media (max-width:560px){.riel__p{padding-left:30px;padding-bottom:var(--s4)}}
+
+/* sin JS el riel queda lleno y todos los pasos legibles */
+.sin-js .riel__frente{transform:scaleY(1)}
+.sin-js .riel__p h3{font-weight:600;color:var(--texto)}
+.sin-js .riel__p p{opacity:1;filter:none;transform:none}
+.sin-js .riel__p::before{border-color:var(--dorado);background:var(--dorado)}
+.sin-js .riel__n{font-weight:600;color:var(--texto)}
+
+/* ---------- 06 equipo: la palabra que se te viene encima ----------
+   Copiado de la sección Team de ario.law y reescrito acá con GSAP (2026-08-18,
+   ver design/equipo-zoom-palabra.html y design/equipo-nuevo.html). Reemplaza al
+   carrusel de profundidad, que mostraba UNA cara por vez y escondía dos, y con
+   él se fueron el radio de 22px, las sombras difusas, el vidrio esmerilado, las
+   flechas, los puntos y el arrastre. Lo que queda es la gramática de Servicios:
+   sin cajas, sólo hairlines, y el peso de la tipografía haciendo la jerarquía.
+
+   El pin y el scrub los hace ScrollTrigger; el CSS sólo pone el escenario. */
+.zm{position:relative;height:100svh}
+/* Red de contención (18-08). El pin-spacer que GSAP arma alrededor de la
+   sección es un div pelado: no hereda .sec--dark y no tiene fondo. Mientras el
+   pin esté bien medido no se ve nunca, pero cualquier píxel que sobre —un
+   refresh que llegue tarde, un alto que cambie a destiempo— deja pasar el hueso
+   del body y en medio del tramo oscuro se lee como un fogonazo blanco. Pintado
+   de ónix, el peor caso es una franja oscura de más y no un agujero.
+   Es defensa, no el arreglo: el arreglo está en el JS (ver el guard de
+   scroll-behavior en equipoZoom). El :has ya se usa acá abajo en .eqn. */
+.pin-spacer:has(> .zm){background:var(--onix)}
+.zm__fijo{position:relative;height:100%;overflow:hidden;background:var(--fondo);color:var(--texto)}
+/* El texto chico y la palabra van absolutos: fuera de flujo, el relayout de la
+   palabra creciendo no se propaga a nada. */
+.zm__ante{
+  position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);
+  width:min(90%,30ch);margin:0;text-align:center;
+  font-size:clamp(17px,2vw,26px);line-height:1.32;color:var(--tenue);letter-spacing:-.01em;
+}
+.zm__palabra{
+  position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
+  margin:0;white-space:nowrap;
+  font-family:var(--tipo);font-weight:800;line-height:1;letter-spacing:-.05em;
+  font-size:clamp(58px,13vw,190px);         /* de acá sale la medida base; después manda el JS */
+  /* 🔴 A propósito NO hay will-change ni translate3d acá. Promover la palabra a
+     capa de GPU es lo que la deja borrosa al agrandarse: el navegador rasteriza
+     la capa UNA vez, al tamaño de partida, y después estira el mapa de bits. Por
+     eso el JS anima el font-size y no un transform. */
+}
+.zm__cards{position:absolute;inset:0;display:grid;place-items:stretch}
+
+/* ---- el equipo: tres bandas de piso a techo ----
+   Sin margen, sin gap y sin caja: sólo un hairline entre una y otra. La banda
+   que se mira se abre y las otras se achican; la que se elige se queda con la
+   pantalla y la ficha se lee sobre el propio retrato. */
+.eqn{position:relative;display:grid;height:100%;min-height:0;grid-template-columns:1fr 1fr 1fr;transition:grid-template-columns .6s var(--ease)}
+.eqn details{position:relative;min-width:0;min-height:0;overflow:hidden}
+.eqn details + details{border-left:1px solid rgba(242,234,219,.22)}
+.eqn summary{display:grid;grid-template-rows:1fr;height:100%;min-height:0;cursor:pointer;list-style:none}
+.eqn summary::-webkit-details-marker{display:none}
+.eqn summary::marker{content:""}
+.eqn summary:focus-visible{outline:2px solid var(--dorado);outline-offset:-4px}
+.eqn__foto{position:absolute;inset:0;margin:0;overflow:hidden;background:#101010}
+.eqn__foto::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,10,10,.92) 0%,rgba(10,10,10,.5) 34%,rgba(10,10,10,.12) 70%);
+}
+.eqn__foto img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  object-position:var(--fx,50%) var(--fy,45%);
+  filter:grayscale(1) brightness(.72) contrast(1.05);
+  transition:filter .6s var(--ease),transform .8s var(--ease);
+}
+/* ---- el encuadre, cara por cara ----
+   object-fit:cover recorta, y con qué criterio lo decide object-position. Un
+   mismo valor para las tres dejaba las caras donde caía: la banda cambia de
+   proporción tres veces (angosta, abierta y, en celular, acostada) y cada foto
+   tiene la cara en otro lado. Los dos números salen de medir el archivo:
+     --fx = a qué % del ANCHO está el eje de la cara. Manda con la banda angosta.
+     --fy = cuánto correr el recorte VERTICAL para que la cara caiga en el tercio
+            de arriba cuando la banda se abre o se acuesta. No es la posición de
+            la cara: es esa posición compensada por cuánto sobra de alto.
+   Cuando llegue la foto buena de Matías se vuelven a medir estos dos y listo. */
+.eqn details:nth-child(1){--fx:51%;--fy:47%}   /* Sergio: parado, cara alta y centrada */
+.eqn details:nth-child(2){--fx:47%;--fy:60%}   /* Matías: sentado, cara baja y algo a la izquierda */
+.eqn details:nth-child(3){--fx:49%;--fy:56%}   /* Ayelén: sentada, cara baja */
+/* el premio de pasar el mouse es la cara, no un efecto */
+.eqn details:hover .eqn__foto img,
+.eqn details:focus-within .eqn__foto img{filter:grayscale(0) brightness(.94) contrast(1)}
+.eqn__datos{position:relative;z-index:2;align-self:end;display:grid;gap:8px;padding:clamp(20px,2.6vw,34px)}
+.eqn__num{font:600 11px/1 var(--mono);letter-spacing:.18em;color:rgba(242,234,219,.5)}
+.eqn__nom{
+  margin:0;font-family:var(--tipo);font-weight:800;letter-spacing:-.05em;line-height:.98;
+  font-size:clamp(24px,3vw,44px);max-width:9ch;color:var(--hueso);
+}
+.eqn__esp{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dorado)}
+.eqn__esp--vacio{color:rgba(242,234,219,.5)}   /* Ayelén: no hay especialidad que declarar */
+.eqn__cargo{font-size:13.5px;line-height:1.35;color:rgba(242,234,219,.72);margin:0}
+.eqn__ver{
+  display:inline-flex;align-items:center;gap:7px;
+  font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--hueso);
+}
+.eqn__ver i{font-style:normal;transition:transform .3s var(--ease)}
+.eqn details:hover .eqn__ver i{transform:translateX(4px)}
+.eqn details[open] .eqn__ver{opacity:0;transition:opacity .2s var(--ease)}
+/* la banda que se mira se abre */
+.eqn:has(> details:nth-child(1):hover),.eqn:has(> details:nth-child(1):focus-within){grid-template-columns:1.6fr .7fr .7fr}
+.eqn:has(> details:nth-child(2):hover),.eqn:has(> details:nth-child(2):focus-within){grid-template-columns:.7fr 1.6fr .7fr}
+.eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within){grid-template-columns:.7fr .7fr 1.6fr}
+/* la que se elige se queda con casi todo.
+   🔴 CASI, y no con todo (18-08). Antes las otras dos iban a 0fr y quedaban de
+   1px: con una ficha abierta no había forma de pasar a otro abogado —el ✕ era
+   la única salida y encima estaba tapado por el header—. Ahora sobrevive un
+   canto de cada banda cerrada, del ancho de un dedo, que sigue siendo el
+   <summary> de esa persona: se toca y se salta directo. De paso, las tres
+   siguen a la vista, que es lo que dice la sección. */
+.eqn{--canto:clamp(52px,4.8vw,76px)}
+.eqn:has(> details:nth-child(1)[open]){grid-template-columns:1fr var(--canto) var(--canto)}
+.eqn:has(> details:nth-child(2)[open]){grid-template-columns:var(--canto) 1fr var(--canto)}
+.eqn:has(> details:nth-child(3)[open]){grid-template-columns:var(--canto) var(--canto) 1fr}
+/* en el canto no entra un nombre de 9ch: se va el texto y queda la cara, que
+   es la que identifica. El aclarado de la foto al pasar por encima —que ya
+   existía— es el que avisa que eso se toca. */
+.eqn:has(> details[open]) > details:not([open]) .eqn__datos{
+  opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
+}
+/* la ficha: ónix sólido sobre el propio retrato, sin vidrio y sin blur */
+.eqn__ficha{
+  position:absolute;inset:0;z-index:6;display:grid;grid-template-columns:1fr;justify-items:end;
+  visibility:hidden;pointer-events:none;opacity:0;
+  transition:opacity .45s var(--ease),visibility 0s .45s;
+}
+.eqn details[open] .eqn__ficha{visibility:visible;pointer-events:auto;opacity:1;transition:opacity .45s var(--ease) .15s,visibility 0s}
+.eqn details[open] .eqn__foto img{filter:grayscale(0) brightness(.8);transform:scale(1.04)}
+.eqn__txt{
+  width:min(100%,54ch);height:100%;overflow-y:auto;align-content:center;display:grid;gap:10px;
+  padding:clamp(20px,3vw,40px);padding-left:clamp(24px,6vw,90px);
+  background:linear-gradient(to left,rgba(10,10,10,.94) 0%,rgba(10,10,10,.9) 62%,transparent 100%);
+}
+.eqn__txt h3{
+  margin:0 0 6px;font-family:var(--tipo);font-weight:800;letter-spacing:-.04em;line-height:1;
+  font-size:clamp(24px,2.6vw,38px);color:var(--hueso);
+}
+/* en pantalla ancha el nombre grande de abajo sigue a la vista con la ficha
+   abierta, así que el h3 del panel decía el nombre dos veces */
+@media (min-width:761px){ .eqn__txt h3{display:none} }
+.eqn__txt p{font-size:14.5px;line-height:1.55;color:rgba(242,234,219,.84);margin:0}
+.eqn__txt p.hueco__d{
+  font:12px/1.5 var(--mono);color:rgba(242,234,219,.72);
+  border:1px dashed rgba(242,234,219,.34);padding:10px 12px;background:none;
+}
+.eqn__pie{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.eqn__x{
+  all:unset;position:absolute;top:14px;right:14px;z-index:7;width:38px;height:38px;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid rgba(242,234,219,.34);color:var(--hueso);font-size:15px;
+  transition:background .25s var(--ease),border-color .25s var(--ease);
+}
+.eqn__x:hover{background:rgba(242,234,219,.1);border-color:var(--hueso)}
+/* el círculo se queda en 38 pero el área que recibe el dedo se estira a 44,
+   mismo criterio que el resto del sitio */
+.eqn__x::after{content:"";position:absolute;top:50%;left:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+@media (max-width:760px){
+  .eqn{grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr;transition:grid-template-rows .6s var(--ease)}
+  .eqn details + details{border-left:0;border-top:1px solid rgba(242,234,219,.22)}
+  /* 🔴 Acá el reparto es por FILAS, y hay que apagarle las columnas a mano
+     (18-08). Las reglas de arriba son `.eqn:has(> details…)`: puntúan (0,2,1)
+     contra el (0,1,0) del `.eqn` de esta media query, y una media query no
+     suma especificidad — así que su grid-template-columns seguía mandando y la
+     banda abierta quedaba de 44px de ANCHO en vez de repartir a lo alto.
+     Antes no se notaba porque el valor viejo era 0fr y colapsaba igual de las
+     dos maneras. Estas tres empatan en especificidad y van después: ganan. */
+  .eqn:has(> details:nth-child(1)[open]),
+  .eqn:has(> details:nth-child(2)[open]),
+  .eqn:has(> details:nth-child(3)[open]),
+  .eqn:has(> details:nth-child(1):hover),.eqn:has(> details:nth-child(1):focus-within),
+  .eqn:has(> details:nth-child(2):hover),.eqn:has(> details:nth-child(2):focus-within),
+  .eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within){
+    grid-template-columns:1fr;
+  }
+  .eqn:has(> details:nth-child(1)[open]){grid-template-rows:1fr var(--canto) var(--canto)}
+  .eqn:has(> details:nth-child(2)[open]){grid-template-rows:var(--canto) 1fr var(--canto)}
+  .eqn:has(> details:nth-child(3)[open]){grid-template-rows:var(--canto) var(--canto) 1fr}
+  .eqn__txt{width:100%;background:rgba(10,10,10,.92);padding-left:24px}
+}
+/* Con una ficha abierta en celular los dos cantos se apilan al pie, y ahí vive
+   la barra fija de WhatsApp/Llamar (59px de alto, aparece a los 900px). El
+   canto de la tercera persona caía justo debajo: medido, el toque en su centro
+   se lo llevaba un <a> de la barra y esa persona era inalcanzable.
+   Va sólo con ficha abierta a propósito: sin ella los tres nombres terminan en
+   761 sobre 785 y entran holgados, así que no hay nada que corregir. */
+@media (max-width:900px){
+  .zm__cards:has(.eqn details[open]){bottom:60px}
+}
+/* Sin JS y con movimiento reducido: el bloque entero a la vista, sin pin y sin
+   viaje. La palabra queda a tamaño natural arriba de las tres bandas. */
+.zm--quieto,.sin-js .zm{height:auto}
+.zm--quieto .zm__fijo,.sin-js .zm__fijo{height:auto;overflow:visible;padding:var(--s7) 0}
+.zm--quieto .zm__ante,.zm--quieto .zm__palabra,
+.sin-js .zm__ante,.sin-js .zm__palabra{position:static;transform:none;margin:0 auto;text-align:center}
+.zm--quieto .zm__cards,.sin-js .zm__cards{position:static;margin-top:var(--s6);opacity:1}
+.zm--quieto .eqn,.sin-js .eqn{height:70svh}
+.sin-js .eqn details,.zm--quieto .eqn details{opacity:1!important;transform:none!important}
+
+/* ---------- 07 reseñas: tres columnas en marcha lenta ----------
+   Adaptación de TestimonialsColumn: sin React, sin motion/react — el loop es
+   un @keyframes y la máscara de bordes, un mask-image. Las tarjetas son huecos
+   marcados: no se rellenan con reseñas ni con caras inventadas. */
+.mq{
+  display:flex;justify-content:center;gap:var(--s3);margin-top:var(--s6);
+  max-height:740px;overflow:hidden;
+  --m:linear-gradient(to bottom,transparent,#000 25%,#000 75%,transparent);
+  mask-image:var(--m);-webkit-mask-image:var(--m);
+}
+.mq__t{display:flex;flex-direction:column;gap:var(--s3);padding-bottom:var(--s3);animation:mq 15s linear infinite}
+.mq:hover .mq__t{animation-play-state:paused}
+@keyframes mq{to{transform:translate3d(0,-50%,0)}}
+.mq__c{width:320px;flex:none}
+.rs{
+  border:1px dashed var(--trama-borde);
+  background:var(--trama);
+  padding:var(--s4);display:flex;flex-direction:column;gap:12px;
+}
+.rs__e{letter-spacing:.3em;color:var(--tenue);font-size:14px}
+@media (max-width:1024px){.mq__c--lg{display:none}}
+@media (max-width:768px){.mq__c--md{display:none}}
+
+/* ---------- 08 formulario ---------- */
+.paso__t{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--tenue);margin-bottom:var(--s3)}
+/* ---------- legajo: pestañas por expediente + panel ----------
+   Reemplaza al asistente de dos pasos (2026-08-09): elegir el expediente
+   reemplaza al "Seguir →" de antes en vez de sumarse a él, y la frase de
+   arriba del panel dice, con las palabras del buyer persona del BRIEF §1,
+   lo que esa persona necesita oír — antes de pedirle un solo dato. */
+.leg{display:grid;grid-template-columns:minmax(240px,.82fr) 1.18fr;gap:var(--s6);margin-top:var(--s6);align-items:start}
+.leg__col{position:sticky;top:100px}
+.leg__rail{display:flex;flex-direction:column;border-top:1px solid var(--linea-suave)}
+.leg__tab{
+  all:unset;cursor:pointer;display:block;padding:var(--s4) var(--s2);
+  border-bottom:2px solid var(--linea-suave);
+  transition:background .3s var(--ease),border-color .3s var(--ease);
+}
+.leg__tab span{display:block;font-size:16px;font-weight:500;letter-spacing:-.015em;color:var(--tenue);transition:color .3s var(--ease)}
+.leg__tab i{display:block;font-style:normal;font-size:12.5px;line-height:1.5;color:var(--tenue);margin-top:5px;opacity:.82}
+.leg__tab:hover{background:rgba(242,234,219,.06)}
+/* estado activo por peso y relleno, nunca por un borde lateral de color —
+   misma regla que ya rige el hero (B) y la ficha de equipo */
+.leg__tab[aria-selected="true"]{background:var(--superficie);border-bottom-color:var(--dorado)}
+.leg__tab[aria-selected="true"] span{color:var(--texto);font-weight:600}
+.leg__panel{min-width:0}
+.leg__voz{
+  font-size:clamp(18px,2vw,22px);line-height:1.4;letter-spacing:-.015em;font-weight:500;
+  color:var(--texto);max-width:46ch;transition:opacity .28s var(--ease);
+}
+.leg__tag{font-weight:600;color:inherit}
+@media (max-width:900px){
+  .leg{grid-template-columns:1fr;gap:var(--s4)}
+  .leg__col{position:static}
+  .leg__rail{flex-direction:row;flex-wrap:wrap;border-top:0}
+  .leg__tab{flex:1 1 46%;border-bottom:2px solid var(--linea-suave)}
+}
+@media (prefers-reduced-motion:reduce){
+  .leg__voz{transition:none}
+}
+/* pantalla de confirmación: reemplaza al formulario en el mismo lugar */
+.listo{border:1px solid var(--dorado);background:var(--superficie);padding:var(--s5);margin-top:var(--s6)}
+.listo h3{font-size:clamp(26px,3.4vw,40px);letter-spacing:-.035em;font-weight:600;margin-top:6px}
+.listo>p{margin-top:14px;font-size:16px;color:var(--tenue);max-width:46ch}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.campo{display:flex;flex-direction:column;gap:8px}
+.campo--full{grid-column:1/-1}
+.campo label{font-size:13px;font-weight:500}
+.campo label i{font-style:normal;color:var(--tenue)}
+.campo input,.campo textarea{
+  font:inherit;font-size:16px;color:var(--grafito);background:var(--blanco);
+  border:1px solid var(--linea);padding:14px 16px;border-radius:0;
+  transition:border-color .28s var(--ease);
+}
+.campo input:focus,.campo textarea:focus{border-color:var(--grafito)}
+.campo textarea{min-height:110px;resize:vertical}
+.form__pie{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center;justify-content:space-between;margin-top:var(--s5)}
+.form__der{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:center}
+/* el envío es el último de la fila pero nunca el más débil: queda pegado a la
+   derecha, y cuando el pie envuelve toma el ancho completo */
+.form__env{margin-left:auto}
+@media (max-width:760px){
+  .form__der{width:100%}
+  .form__env{width:100%;margin-left:0;order:3}
+}
+.form__o{font-size:13px;color:var(--tenue)}
+.form__nota{font-size:13px;color:var(--tenue);margin-top:var(--s3)}
+.oculto{display:none}
+@media (max-width:760px){
+  .campos{grid-template-columns:1fr}
+  .form{padding:var(--s4)}
+  .form__pie{justify-content:flex-start}
+}
+@media (max-width:560px){.ops{grid-template-columns:1fr}}
+
+/* ---------- 09 mapa ---------- */
+.mapa-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);margin-top:var(--s6);align-items:stretch}
+/* Mapa interactivo de Google, con carga por clic: no se piden scripts de Google
+   hasta que la persona lo pide, así que la página no arrastra cartel de cookies
+   mientras nadie toca el mapa. Antes del clic, la dirección es el contenido. */
+.mapa{
+  position:relative;min-height:340px;height:100%;overflow:hidden;
+  border:1px solid var(--linea);background:var(--superficie);
+}
+.mapa__pre{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:10px;
+  padding:var(--s4);
+  background:var(--trama);
+}
+.mapa__pre h3{font-size:clamp(22px,2.4vw,30px);letter-spacing:-.035em;line-height:1.15}
+.mapa__pre .btn{align-self:flex-start;margin-top:10px}
+.mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;filter:saturate(.9)}
+.mapa[data-cargado="si"] .mapa__pre{display:none}
+/* la ficha en dos columnas: los datos cortos se leen de un barrido y la
+   dirección, las ciudades y lo pendiente ocupan el ancho completo */
+.ficha{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--s4)}
+.ficha>*{border-top:1px solid var(--linea-suave);padding:var(--s3) 0}
+.ficha>*:first-child{border-top:0;padding-top:0}
+.ficha .f-full{grid-column:1/-1}
+@media (max-width:560px){.ficha{grid-template-columns:1fr}}
+.ficha span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);font-weight:500;display:block;margin-bottom:6px}
+.ficha p{font-size:14px;color:var(--tenue)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills i{font-style:normal;font-size:13px;border:1px solid var(--linea);padding:5px 10px;color:var(--texto)}
+@media (max-width:900px){.mapa-grid{grid-template-columns:1fr}}
+
+/* ---------- 10 footer ---------- */
+/* Sin margen: el bloque 09 ya es oscuro y el pie continúa esa base. Los
+   separa una hairline dorada, que es como el manual permite usar el dorado. */
+.foot{background:var(--onix);color:rgba(255,255,255,.66);padding:var(--s7) 0 var(--s5);border-top:1px solid rgba(212,175,106,.30)}
+.foot a{color:#fff}
+.foot a:hover{text-decoration-color:var(--dorado)}
+/* !important por lo mismo que en el header (ver el bloque 01): los tres <path>
+   del símbolo traen style="fill:#1C1C1C" escrito en el archivo, y un estilo en
+   línea le gana a la hoja. Sin esto la regla existía y no hacía nada — el
+   símbolo quedaba grafito sobre ónix, o sea invisible, y en el pie se veía el
+   nombre del estudio con un hueco al lado. El único <svg> del pie es el
+   símbolo, así que la regla no toca nada más. */
+.foot svg path{fill:#fff!important}
+.foot__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:var(--s5)}
+.foot h3{color:#fff;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;margin-bottom:var(--s3)}
+.foot li{margin-bottom:9px;font-size:14px}
+.foot p{font-size:14px;line-height:1.65}
+.foot .marca__txt b{color:#fff}
+.foot .marca__txt span{color:rgba(255,255,255,.5)}
+.foot .hueco__d{color:rgba(255,255,255,.82);border:1px dashed rgba(255,255,255,.34);padding:8px 10px;display:inline-block}
+.legal{
+  margin-top:var(--s6);padding-top:var(--s3);border-top:1px solid rgba(255,255,255,.14);
+  font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.55);max-width:88ch;
+}
+@media (max-width:980px){.foot__grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.foot__grid{grid-template-columns:1fr;gap:var(--s4)}.foot{padding-top:var(--s6)}}
+
+/* ---------- 11 barra fija, solo celular ---------- */
+.barra{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;display:none;
+  grid-template-columns:1.4fr 1fr;background:var(--hueso);border-top:1px solid var(--linea);
+  padding-bottom:env(safe-area-inset-bottom);
+  transform:translate3d(0,110%,0);transition:transform .26s var(--ease);
+}
+.barra[data-visible="si"]{transform:none}
+.barra a{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:58px;font-size:15px;font-weight:500;color:var(--grafito);
+  border-left:1px solid var(--linea-suave);
+}
+.barra a:first-child{border-left:0;background:var(--grafito);color:var(--blanco)}
+@media (max-width:900px){.barra{display:grid}body{padding-bottom:58px}}
+
+/* ---------- movimiento: una sola gramática, cinco gestos ----------
+   Antes había un solo gesto —16px hacia arriba y opacidad— para las setenta
+   y pico de piezas de la página, y por eso bajar se sentía plano: todo
+   llegaba igual, desde el mismo lado, a la misma velocidad. Ahora hay CINCO,
+   y cada uno dice algo distinto sobre lo que entra:
+
+     (sin valor)  sube. El texto corrido: párrafos, rótulos, botones.
+     izq / der    entra de costado. Sólo para las mitades de un bloque en dos
+                  columnas — se abren como una carpeta, y el ojo entiende que
+                  son dos partes de lo mismo.
+     escala       crece de 0,94. Las fotos con esquina redondeada y las
+                  tarjetas de equipo, que con blur se ven sucias.
+     cortina      se descubre de abajo hacia arriba. La retícula de servicios
+                  y la fachada: la pieza no se mueve, se revela.
+     linea        una hairline que se dibuja de izquierda a derecha.
+
+   Los cinco comparten el mismo motor: cuatro custom properties (--ax, --ay,
+   --as, --ab) que sólo cambian de valor, un único .vista que las manda a
+   cero, y un retardo propio (--d) que escribe el script para escalonar a los
+   hermanos. Una sola transición para todo el sitio, cinco declaraciones de
+   una línea para las variantes. */
+[data-anim]{
+  opacity:0;
+  transform:translate3d(var(--ax,0px),var(--ay,30px),0) scale(var(--as,1));
+  filter:blur(var(--ab,6px));
+}
+[data-anim].vista{
+  opacity:1;transform:none;filter:blur(0);
+  transition:opacity .55s var(--salida) var(--d,0ms),
+             filter .6s var(--salida) var(--d,0ms),
+             transform .78s var(--resorte) var(--d,0ms),
+             clip-path .86s var(--salida) var(--d,0ms);
+}
+[data-anim="izq"]{--ax:-42px;--ay:0px}
+[data-anim="der"]{--ax:42px;--ay:0px}
+[data-anim="escala"]{--as:.94;--ay:26px;--ab:0px}
+/* el cierre no es inset(0) sino un 3% negativo: la máscara termina UN POCO
+   MÁS GRANDE que la caja, así no recorta ni el anillo de foco, ni la sombra
+   del hover, ni el borde compartido de la retícula. Sigue siendo la misma
+   función inset(), o sea que interpola. */
+[data-anim="cortina"]{--ay:0px;--ab:0px;clip-path:inset(0% 0% 100% 0%)}
+[data-anim="cortina"].vista{clip-path:inset(-3% -3% -3% -3%)}
+[data-anim="linea"]{--ab:0px;opacity:1;transform:scaleX(0);transform-origin:left center}
+
+.sin-js [data-anim]{opacity:1;transform:none;filter:none;clip-path:none}
+
+/* En celular el blur sale del sistema: son diez o doce capas desenfocándose
+   a la vez sobre fotos de 1600px, y el costo se paga justo donde el aparato
+   es más chico. El gesto se sostiene igual con desplazamiento y opacidad. */
+@media (max-width:620px){
+  [data-anim]{--ab:0px;--ay:22px}
+  [data-anim="izq"],[data-anim="der"]{--ax:0px;--ay:22px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  [data-anim]{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
+  .barra,.panel{transform:none!important}
+  .sp-i{opacity:1!important;transform:none!important;filter:none!important}
+  /* La regla universal apaga transiciones, no estados iniciales: todo lo que
+     arranca desplazado, recortado o invisible necesita su línea acá o se
+     queda así para siempre. Van juntas las cinco piezas nuevas del 12-08. */
+  .kick::before{transform:none!important}
+  .head{transform:none!important}
+  .lectura{display:none}
+  .hero__foto{opacity:1!important;transform:none!important}
+  .hero__foto img{--py:0px!important}
+  .nos__foto img{--py:0px!important}
+  /* La regla universal de arriba ya frena animación y transición en todo. Lo
+     único que hace falta acá es el estado final que esa regla no fija sola:
+     el pip del scroll-cue quedaría a mitad de camino si no se lo manda a
+     home. El rotador ni entra en este caso — heroRotador() corta apenas ve
+     reduce=true y el h1/el área se quedan con su fallback plano del HTML. */
+  .hero__bajaL::after{transform:none}
+  .mq{max-height:none;mask-image:none;-webkit-mask-image:none}
+  .mq__t{animation:none}
+  .panel{visibility:hidden}
+  .panel[data-abierto="si"]{visibility:visible}
+  .barre::after{transform:scaleX(1)}
+  /* el riel del bloque 05 queda lleno y todos los pasos en su estado final */
+  .riel__frente{transform:scaleY(1)!important}
+  .riel__p h3{font-weight:600!important;color:var(--texto)!important}
+  .riel__p p{opacity:1!important;filter:none!important;transform:none!important}
+  .riel__p::before{border-color:var(--dorado)!important;background:var(--dorado)!important}
+  .riel__n{font-weight:600!important;color:var(--texto)!important}
+  /* el telón directamente no se pone: sin transiciones sería una pantalla negra
+     que aparece y desaparece de golpe, que es peor que no tenerlo */
+  .telon,.telon__sim{display:none!important}
+  .telonando .marca{opacity:1!important}
+  html{scroll-behavior:auto}
+}
