@@ -1177,11 +1177,13 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
 }
 .zm__cards{position:absolute;inset:0;display:grid;place-items:stretch}
 
-/* ---- el equipo: tres bandas de piso a techo ----
+/* ---- el equipo: bandas de piso a techo ----
    Sin margen, sin gap y sin caja: sólo un hairline entre una y otra. La banda
    que se mira se abre y las otras se achican; la que se elige se queda con la
-   pantalla y la ficha se lee sobre el propio retrato. */
-.eqn{position:relative;display:grid;height:100%;min-height:0;grid-template-columns:1fr 1fr 1fr;transition:grid-template-columns .6s var(--ease)}
+   pantalla y la ficha se lee sobre el propio retrato.
+   Cuatro bandas desde el 24-08 (se sumó Lucía Patthey, ficha en preparación):
+   grid-template-columns y las reglas :has() de abajo están en cuatro. */
+.eqn{position:relative;display:grid;height:100%;min-height:0;grid-template-columns:1fr 1fr 1fr 1fr;transition:grid-template-columns .6s var(--ease)}
 .eqn details{position:relative;min-width:0;min-height:0;overflow:hidden}
 .eqn details + details{border-left:1px solid rgba(242,234,219,.22)}
 .eqn summary{display:grid;grid-template-rows:1fr;height:100%;min-height:0;cursor:pointer;list-style:none}
@@ -1222,7 +1224,8 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
   font-size:clamp(24px,3vw,44px);max-width:9ch;color:var(--hueso);
 }
 .eqn__esp{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dorado)}
-.eqn__esp--vacio{color:rgba(242,234,219,.5)}   /* Ayelén: no hay especialidad que declarar */
+.eqn__esp--vacio{color:rgba(242,234,219,.5)}   /* Lucía: no hay rol que declarar todavía.
+   Ayelén lo usaba hasta el 28-08: se le sacó el badge y quedó sólo el cargo. */
 .eqn__cargo{font-size:13.5px;line-height:1.35;color:rgba(242,234,219,.72);margin:0}
 .eqn__ver{
   display:inline-flex;align-items:center;gap:7px;
@@ -1232,9 +1235,10 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
 .eqn details:hover .eqn__ver i{transform:translateX(4px)}
 .eqn details[open] .eqn__ver{opacity:0;transition:opacity .2s var(--ease)}
 /* la banda que se mira se abre */
-.eqn:has(> details:nth-child(1):hover),.eqn:has(> details:nth-child(1):focus-within){grid-template-columns:1.6fr .7fr .7fr}
-.eqn:has(> details:nth-child(2):hover),.eqn:has(> details:nth-child(2):focus-within){grid-template-columns:.7fr 1.6fr .7fr}
-.eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within){grid-template-columns:.7fr .7fr 1.6fr}
+.eqn:has(> details:nth-child(1):hover),.eqn:has(> details:nth-child(1):focus-within){grid-template-columns:1.6fr .7fr .7fr .7fr}
+.eqn:has(> details:nth-child(2):hover),.eqn:has(> details:nth-child(2):focus-within){grid-template-columns:.7fr 1.6fr .7fr .7fr}
+.eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within){grid-template-columns:.7fr .7fr 1.6fr .7fr}
+.eqn:has(> details:nth-child(4):hover),.eqn:has(> details:nth-child(4):focus-within){grid-template-columns:.7fr .7fr .7fr 1.6fr}
 /* la que se elige se queda con casi todo.
    🔴 CASI, y no con todo (18-08). Antes las otras dos iban a 0fr y quedaban de
    1px: con una ficha abierta no había forma de pasar a otro abogado —el ✕ era
@@ -1243,9 +1247,10 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
    <summary> de esa persona: se toca y se salta directo. De paso, las tres
    siguen a la vista, que es lo que dice la sección. */
 .eqn{--canto:clamp(52px,4.8vw,76px)}
-.eqn:has(> details:nth-child(1)[open]){grid-template-columns:1fr var(--canto) var(--canto)}
-.eqn:has(> details:nth-child(2)[open]){grid-template-columns:var(--canto) 1fr var(--canto)}
-.eqn:has(> details:nth-child(3)[open]){grid-template-columns:var(--canto) var(--canto) 1fr}
+.eqn:has(> details:nth-child(1)[open]){grid-template-columns:1fr var(--canto) var(--canto) var(--canto)}
+.eqn:has(> details:nth-child(2)[open]){grid-template-columns:var(--canto) 1fr var(--canto) var(--canto)}
+.eqn:has(> details:nth-child(3)[open]){grid-template-columns:var(--canto) var(--canto) 1fr var(--canto)}
+.eqn:has(> details:nth-child(4)[open]){grid-template-columns:var(--canto) var(--canto) var(--canto) 1fr}
 /* en el canto no entra un nombre de 9ch: se va el texto y queda la cara, que
    es la que identifica. El aclarado de la foto al pasar por encima —que ya
    existía— es el que avisa que eso se toca. */
@@ -1289,7 +1294,7 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
    mismo criterio que el resto del sitio */
 .eqn__x::after{content:"";position:absolute;top:50%;left:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
 @media (max-width:760px){
-  .eqn{grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr;transition:grid-template-rows .6s var(--ease)}
+  .eqn{grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr 1fr;transition:grid-template-rows .6s var(--ease)}
   .eqn details + details{border-left:0;border-top:1px solid rgba(242,234,219,.22)}
   /* 🔴 Acá el reparto es por FILAS, y hay que apagarle las columnas a mano
      (18-08). Las reglas de arriba son `.eqn:has(> details…)`: puntúan (0,2,1)
@@ -1297,18 +1302,22 @@ body.ficha-abierta .head{transform:translate3d(0,-102%,0)}
      suma especificidad — así que su grid-template-columns seguía mandando y la
      banda abierta quedaba de 44px de ANCHO en vez de repartir a lo alto.
      Antes no se notaba porque el valor viejo era 0fr y colapsaba igual de las
-     dos maneras. Estas tres empatan en especificidad y van después: ganan. */
+     dos maneras. Estas empatan en especificidad y van después: ganan.
+     Extendido a un cuarto abogado (Lucía Patthey) el 24-08. */
   .eqn:has(> details:nth-child(1)[open]),
   .eqn:has(> details:nth-child(2)[open]),
   .eqn:has(> details:nth-child(3)[open]),
+  .eqn:has(> details:nth-child(4)[open]),
   .eqn:has(> details:nth-child(1):hover),.eqn:has(> details:nth-child(1):focus-within),
   .eqn:has(> details:nth-child(2):hover),.eqn:has(> details:nth-child(2):focus-within),
-  .eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within){
+  .eqn:has(> details:nth-child(3):hover),.eqn:has(> details:nth-child(3):focus-within),
+  .eqn:has(> details:nth-child(4):hover),.eqn:has(> details:nth-child(4):focus-within){
     grid-template-columns:1fr;
   }
-  .eqn:has(> details:nth-child(1)[open]){grid-template-rows:1fr var(--canto) var(--canto)}
-  .eqn:has(> details:nth-child(2)[open]){grid-template-rows:var(--canto) 1fr var(--canto)}
-  .eqn:has(> details:nth-child(3)[open]){grid-template-rows:var(--canto) var(--canto) 1fr}
+  .eqn:has(> details:nth-child(1)[open]){grid-template-rows:1fr var(--canto) var(--canto) var(--canto)}
+  .eqn:has(> details:nth-child(2)[open]){grid-template-rows:var(--canto) 1fr var(--canto) var(--canto)}
+  .eqn:has(> details:nth-child(3)[open]){grid-template-rows:var(--canto) var(--canto) 1fr var(--canto)}
+  .eqn:has(> details:nth-child(4)[open]){grid-template-rows:var(--canto) var(--canto) var(--canto) 1fr}
   .eqn__txt{width:100%;background:rgba(10,10,10,.92);padding-left:24px}
 }
 /* Con una ficha abierta en celular los dos cantos se apilan al pie, y ahí vive
