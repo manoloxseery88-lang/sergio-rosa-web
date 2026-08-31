@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Las doce páginas del sitio: la home y una por área de práctica.
+
+  🔴 LAS URL LLEVAN EL DOMINIO ADENTRO. El día que haya dominio propio hay que
+  reescribir las doce acá, además de las claves `url` de los datos estructurados,
+  el `canonical` y el Open Graph. Un sitemap con URL de otro dominio no se ignora
+  en silencio: Search Console lo rechaza entero.
+
+  `lastmod` es la fecha del último cambio real de contenido, no la del último
+  commit. Si se toca el CSS y no el texto, no se toca.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/accidentes-de-transito/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/amparos/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/danos-y-perjuicios/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/derecho-de-familia/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/derecho-empresarial/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/derecho-laboral/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/derecho-penal/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/derecho-tributario/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/desalojo/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/prescripcion-adquisitiva/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+  <url>
+    <loc>https://manoloxseery88-lang.github.io/sergio-rosa-web/sucesiones/</loc>
+    <lastmod>2026-08-31</lastmod>
+  </url>
+
+</urlset>

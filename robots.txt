@@ -1,0 +1,21 @@
+# Sergio Rosa y Asociados
+#
+# ⚠️ HOY ESTE ARCHIVO NO LO LEE NADIE, Y ESTÁ BIEN QUE ESTÉ IGUAL.
+#
+# Los rastreadores buscan robots.txt SOLO en la raíz del dominio. Mientras el
+# sitio viva en un project page de GitHub, este archivo se sirve en
+#     manoloxseery88-lang.github.io/sergio-rosa-web/robots.txt
+# y el que se lee es
+#     manoloxseery88-lang.github.io/robots.txt
+# que hoy da 404 (verificado el 31-08) — o sea, todo permitido por defecto.
+#
+# Queda escrito para el día del dominio propio: ahí la raíz del repo pasa a ser
+# la raíz del dominio y esto empieza a regir tal cual está.
+#
+# 🔴 Mientras tanto, el sitemap NO se descubre solo: hay que cargarlo a mano en
+# Google Search Console. Es un paso manual, no lo hace este archivo.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://manoloxseery88-lang.github.io/sergio-rosa-web/sitemap.xml

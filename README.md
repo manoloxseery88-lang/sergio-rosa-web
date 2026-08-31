@@ -66,10 +66,26 @@ Tres cosas que se sostienen a propósito:
   página le llega quieta y completa.
 - **Cero CDN.** Las tipografías son archivos nuestros. Nada del sitio depende de un tercero.
 
+## Indexación
+
+✅ **Las doce páginas están abiertas a Google desde el 31-08.** Hasta ese día las once de área
+llevaban `<meta name="robots" content="noindex, nofollow">` y la home no, así que lo único
+indexable era la página sin datos estructurados. El `meta` salía de `design/build-areas.mjs`, no
+de los archivos: sacarlo a mano de los once HTML no alcanzaba, porque el generador los pisa cada
+vez que se toca la home.
+
+- `sitemap.xml` — las doce URL. 🔴 **Hay que cargarlo a mano en Google Search Console**, no se
+  descubre solo (ver la razón en `robots.txt`).
+- `robots.txt` — escrito, pero **hoy no lo lee nadie**: en un project page de GitHub los
+  rastreadores leen `manoloxseery88-lang.github.io/robots.txt`, no el nuestro. Empieza a regir
+  el día del dominio propio.
+
 ## Antes de publicar
 
-- Las páginas de área llevan `<meta name="robots" content="noindex, nofollow">` con un aviso al
-  lado. **Hay que sacarlo.**
-- Falta el dominio propio. Cuando esté, se completan las claves `url` de los datos estructurados
-  (`LegalService`, `BreadcrumbList`, `FAQPage`) y se agregan `canonical` y Open Graph.
-- El bloque de reseñas de la home sigue con nueve textos de relleno visibles.
+- Falta el dominio propio. Cuando esté: las doce URL del `sitemap.xml`, las claves `url` de los
+  datos estructurados (`LegalService`, `BreadcrumbList`, `FAQPage`), y `canonical` y Open Graph,
+  que hoy **no existen en ninguna de las doce**.
+- La home no tiene datos estructurados. Los `LegalService` / `BreadcrumbList` / `FAQPage` viven
+  sólo en las páginas de área.
+- El bloque de reseñas de la home está tapado con `display:none`: la ficha de Google existe pero
+  tiene cero reseñas. O se cargan reales, o el bloque se borra.
