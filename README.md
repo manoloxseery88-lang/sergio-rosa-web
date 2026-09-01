@@ -77,7 +77,7 @@ vez que se toca la home.
 - `sitemap.xml` — las doce URL. 🔴 **Hay que cargarlo a mano en Google Search Console**, no se
   descubre solo (ver la razón en `robots.txt`).
 - `robots.txt` — escrito, pero **hoy no lo lee nadie**: en un project page de GitHub los
-  rastreadores leen `manoloxseery88-lang.github.io/robots.txt`, no el nuestro. Empieza a regir
+  rastreadores leen `seerystudio.github.io/robots.txt`, no el nuestro. Empieza a regir
   el día del dominio propio.
 
 ## Antes de publicar
